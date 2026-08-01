@@ -1,0 +1,220 @@
+{
+  "name": "DevOps · Benchmark Performance",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "n-0-6ovluw",
+      "name": "Semanal",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.example.com/endpoint",
+        "options": {}
+      },
+      "id": "n-1-z2ekh3",
+      "name": "Ejecutar Benchmark",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nreturn items.map(i => ({ json: { ...i.json, procesado: true, fecha: new Date().toISOString() } }));"
+      },
+      "id": "n-2-goj2qi",
+      "name": "Comparar Baseline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.valor }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n-3-mtrx8x",
+      "name": "Degradado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "TU_CHAT_ID",
+        "text": "=Notificacion: {{ $json.mensaje || JSON.stringify($json) }}",
+        "additionalFields": {}
+      },
+      "id": "n-4-vw2jeq",
+      "name": "Alertar",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        780,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "TU_SPREADSHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Datos"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "id": "n-5-m92w4w",
+      "name": "Actualizar Baseline",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1040,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@tudominio.com",
+        "toEmail": "destino@email.com",
+        "subject": "Notificacion",
+        "emailFormat": "text",
+        "message": "={{ $json.mensaje || \"Notificacion automatica\" }}",
+        "options": {}
+      },
+      "id": "n-6-k86gzo",
+      "name": "Reporte",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1300,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Semanal": {
+      "main": [
+        [
+          {
+            "node": "Ejecutar Benchmark",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecutar Benchmark": {
+      "main": [
+        [
+          {
+            "node": "Comparar Baseline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comparar Baseline": {
+      "main": [
+        [
+          {
+            "node": "Degradado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Degradado?": {
+      "main": [
+        [
+          {
+            "node": "Alertar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alertar": {
+      "main": [
+        [
+          {
+            "node": "Actualizar Baseline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar Baseline": {
+      "main": [
+        [
+          {
+            "node": "Reporte",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": []
+}
