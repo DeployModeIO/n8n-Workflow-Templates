@@ -1288,27 +1288,27 @@ render = function(){
   document.getElementById('stShown').textContent=list.length;
   document.getElementById('countLbl').textContent=`${t('shown')}: ${list.length} / ${TEMPLATES.length}`;
   if(!list.length){document.getElementById('grid').innerHTML=`<div class="empty"><b>🔍</b>${currentLang==='es'?'Sin resultados':'No results'}</div>`;return;}
-  document.getElementById('grid').innerHTML=list.map(t=>{
-    const c=CATS[t.cat]||{color:'#888'};
-    const flow=t.flow.map((f,i)=>{
+  document.getElementById('grid').innerHTML=list.map(tpl=>{
+    const c=CATS[tpl.cat]||{color:'#888'};
+    const flow=tpl.flow.map((f,i)=>{
       const col=NODE_COLORS[f[1]]||"#888";
-      return `<span class="node" style="border-color:${col}55;color:${col}">${f[0]}</span>`+(i<t.flow.length-1?'<span class="arrow">→</span>':'');
+      return `<span class="node" style="border-color:${col}55;color:${col}">${f[0]}</span>`+(i<tpl.flow.length-1?'<span class="arrow">→</span>':'');
     }).join('');
-    const creds=t.creds.length?t.creds.map(x=>`<span class="cred">🔑 ${x}</span>`).join(''):`<span class="tag">${t('noCreds')}</span>`;
-    const uses=t.uses.map(u=>`<li>${u}</li>`).join('');
-    const obs=t.obs.map(o=>`<li>${o}</li>`).join('');
-    const tags=t.tags.map(x=>`<span class="tag">#${x}</span>`).join('');
+    const creds=tpl.creds.length?tpl.creds.map(x=>`<span class="cred">🔑 ${x}</span>`).join(''):`<span class="tag">${t('noCreds')}</span>`;
+    const uses=tpl.uses.map(u=>`<li>${u}</li>`).join('');
+    const obs=tpl.obs.map(o=>`<li>${o}</li>`).join('');
+    const tags=tpl.tags.map(x=>`<span class="tag">#${x}</span>`).join('');
     return `<div class="card" style="--cat:${c.color}">
-      <div class="card-head"><h3>${t.name}</h3><span class="badge" style="color:${c.color};background:${c.color}1f;border:1px solid ${c.color}4d">${catName(t.cat)}</span></div>
-      <div class="desc">${t.desc}</div>
+      <div class="card-head"><h3>${tpl.name}</h3><span class="badge" style="color:${c.color};background:${c.color}1f;border:1px solid ${c.color}4d">${catName(tpl.cat)}</span></div>
+      <div class="desc">${tpl.desc}</div>
       <div class="section-lbl">${t('flow')}</div><div class="flow">${flow}</div>
       <div class="section-lbl">${t('creds')}</div><div class="creds">${creds}</div>
       <div class="section-lbl">${t('useCases')}</div><ul class="uses">${uses}</ul>
       <div class="section-lbl">${t('tags')}</div><div class="tags">${tags}</div>
       <details class="obs"><summary>${t('obs')}</summary><ul>${obs}</ul></details>
       <div class="card-actions">
-        <a class="btn json" style="--cat:${c.color};background:${c.color}" href="${t.cat}/${t.file}.json" target="_blank">${t('openJson')}</a>
-        <a class="btn svg" href="${t.cat}/${t.file}.svg" target="_blank">${t('diagram')}</a>
+        <a class="btn json" style="--cat:${c.color};background:${c.color}" href="${tpl.cat}/${tpl.file}.json" target="_blank">${t('openJson')}</a>
+        <a class="btn svg" href="${tpl.cat}/${tpl.file}.svg" target="_blank">${t('diagram')}</a>
       </div>
     </div>`;
   }).join("");
@@ -1317,7 +1317,7 @@ render = function(){
 // Patch buildTbCats to use i18n
 const origBuildTbCats = buildTbCats;
 buildTbCats = function(){
-  const used=[...new Set(TOOLS.map(t=>t.cat))];
+  const used=[...new Set(TOOLS.map(tool=>tool.cat))];
   let h=`<div class="tb-cat active" onclick="setTbCat('all',this)">${t('all')}</div>`;
   used.forEach(c=>{
     const cat=TB_CATS[c]; if(!cat)return;
@@ -1341,34 +1341,34 @@ renderTb = function(){
   const grid=document.getElementById("tbGrid");
   if(!list.length){grid.innerHTML=`<div class="tb-empty">🔍 ${currentLang==='es'?'Sin resultados':'No results'}</div>`;return;}
   let scanHtml=`<div class="tb-scan ${scanDone?'done':''}"><span class="tb-scan-dot"></span>${scanDone?t('tbScanDone'):t('tbScan')}<span class="tb-scan-count">${connN} ${t('tbConnected')}</span></div>`;
-  grid.innerHTML=scanHtml+list.map(t=>{
-    const cat=TB_CATS[t.cat]||{es:t.cat,en:t.cat};
-    const st=tbStatus[t.id]||'checking';
-    const meta=TB_META[t.id]||{};
+  grid.innerHTML=scanHtml+list.map(tool=>{
+    const cat=TB_CATS[tool.cat]||{es:tool.cat,en:tool.cat};
+    const st=tbStatus[tool.id]||'checking';
+    const meta=TB_META[tool.id]||{};
     const statusColor=st==='online'?'#22c55e':st==='checking'?'#f59e0b':'#475569';
     const statusText=st==='online'?`:${meta.port} ${t('tbConnected')}`:st==='checking'?'...':t('tbNotDetected');
     const hasInstall=meta.winget||meta.docker||meta.npm;
-    return `<div class="tb-card" style="--tc:${cat[currentLang]?'#3b82f6':'#888'}" draggable="true" ondragstart="tbDragStart(event,'${t.id}')">
-      <div class="tb-copy" onclick="event.stopPropagation();tbCopy('${t.id}',this)" title="${t('tbCopyNode')}">
+    return `<div class="tb-card" style="--tc:${cat[currentLang]?'#3b82f6':'#888'}" draggable="true" ondragstart="tbDragStart(event,'${tool.id}')">
+      <div class="tb-copy" onclick="event.stopPropagation();tbCopy('${tool.id}',this)" title="${t('tbCopyNode')}">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
-        <div class="tb-icon">${t.icon}</div>
+        <div class="tb-icon">${tool.icon}</div>
         <div style="flex:1;min-width:0">
-          <div class="tb-name">${t.name}</div>
+          <div class="tb-name">${tool.name}</div>
           <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
             <span class="tb-status-dot" style="background:${statusColor}"></span>
             <span style="font-size:10px;color:var(--txt-faint)">${statusText}</span>
           </div>
         </div>
       </div>
-      <div class="tb-desc">${t.desc}</div>
+      <div class="tb-desc">${tool.desc}</div>
       <div class="tb-foot">
         <span class="tb-badge" style="color:${cat[currentLang]?'#3b82f6':'#888'};background:${cat[currentLang]?'#3b82f6':'#888'}1f;border:1px solid ${cat[currentLang]?'#3b82f6':'#888'}4d">${cat[currentLang]||cat.es}</span>
-        ${hasInstall?`<button class="tb-btn install" onclick="event.stopPropagation();tbShowInstall('${t.id}')">${t('tbInstall')}</button>`:''}
-        ${st==='online'?`<button class="tb-btn connect" onclick="event.stopPropagation();tbConnect('${t.id}')">${t('tbConnect')}</button>`:''}
-        <button class="tb-btn" onclick="event.stopPropagation();tbCopy('${t.id}',null)">${t('tbCopyNode')}</button>
-        <a class="tb-link" href="${t.url}" target="_blank" onclick="event.stopPropagation()">${t('tbDocs')} ↗</a>
+        ${hasInstall?`<button class="tb-btn install" onclick="event.stopPropagation();tbShowInstall('${tool.id}')">${t('tbInstall')}</button>`:''}
+        ${st==='online'?`<button class="tb-btn connect" onclick="event.stopPropagation();tbConnect('${tool.id}')">${t('tbConnect')}</button>`:''}
+        <button class="tb-btn" onclick="event.stopPropagation();tbCopy('${tool.id}',null)">${t('tbCopyNode')}</button>
+        <a class="tb-link" href="${tool.url}" target="_blank" onclick="event.stopPropagation()">${t('tbDocs')} ↗</a>
       </div>
     </div>`;
   }).join("");
