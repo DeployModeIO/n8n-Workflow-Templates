@@ -1,0 +1,10 @@
+{
+  "name": "Marketing - CRM HubSpot desde Formulario",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "contacto", "options": {} }, "id": "hs-wh", "name": "Webhook Form", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-260, 0], "webhookId": "hubspot-contact" },
+    { "parameters": { "assignments": { "assignments": [ { "id": "h1", "name": "email", "value": "={{ $json.body.email }}", "type": "string" }, { "id": "h2", "name": "firstname", "value": "={{ $json.body.nombre }}", "type": "string" }, { "id": "h3", "name": "company", "value": "={{ $json.body.empresa }}", "type": "string" } ] }, "options": {} }, "id": "hs-set", "name": "Mapear Contacto", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [-20, 0] },
+    { "parameters": { "resource": "contact", "operation": "create", "additionalFields": { "properties": { "properties": [ { "key": "email", "value": "={{ $json.email }}" }, { "key": "firstname", "value": "={{ $json.firstname }}" }, { "key": "company", "value": "={{ $json.company }}" } ] } } }, "id": "hs-create", "name": "Crear en HubSpot", "type": "n8n-nodes-base.hubspot", "typeVersion": 2.1, "position": [240, 0] }
+  ],
+  "connections": { "Webhook Form": { "main": [[{ "node": "Mapear Contacto", "type": "main", "index": 0 }]] }, "Mapear Contacto": { "main": [[{ "node": "Crear en HubSpot", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

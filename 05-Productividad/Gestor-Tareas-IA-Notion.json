@@ -1,0 +1,10 @@
+{
+  "name": "Productividad - Gestor de Tareas con IA en Notion",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "tarea", "options": {} }, "id": "tk-wh", "name": "Webhook Tarea", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-280, 0], "webhookId": "nueva-tarea" },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/chat/completions", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"gpt-4o-mini\",\n  \"response_format\":{\"type\":\"json_object\"},\n  \"messages\":[\n    {\"role\":\"system\",\"content\":\"Devuelve JSON {\\\"titulo\\\":\\\"...\\\",\\\"prioridad\\\":\\\"alta|media|baja\\\",\\\"estimado_horas\\\":n}\"},\n    {\"role\":\"user\",\"content\":{{ JSON.stringify($json.body.descripcion) }}}\n  ]\n}", "options": {} }, "id": "tk-ai", "name": "Estructurar IA", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-40, 0] },
+    { "parameters": { "operation": "create", "databaseId": { "__rl": true, "mode": "id", "value": "TU_DATABASE_ID" }, "title": "={{ JSON.parse($json.choices[0].message.content).titulo }}", "options": {} }, "id": "tk-notion", "name": "Crear Tarea Notion", "type": "n8n-nodes-base.notion", "typeVersion": 2.2, "position": [220, 0] }
+  ],
+  "connections": { "Webhook Tarea": { "main": [[{ "node": "Estructurar IA", "type": "main", "index": 0 }]] }, "Estructurar IA": { "main": [[{ "node": "Crear Tarea Notion", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "DevOps - Alerta de Errores (Sentry-like)",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "error", "responseMode": "responseNode", "options": {} }, "id": "er-wh", "name": "Webhook Error", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-280, 0], "webhookId": "error-hook" },
+    { "parameters": { "conditions": { "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "e1", "leftValue": "={{ $json.body.level }}", "rightValue": "error", "operator": { "type": "string", "operation": "equals" } } ], "combinator": "and" }, "options": {} }, "id": "er-if", "name": "Nivel Error?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [-40, 0] },
+    { "parameters": { "select": "channel", "channelId": { "__rl": true, "mode": "name", "value": "alerts" }, "text": "=🐛 ERROR en *{{ $json.body.service }}*\n`{{ $json.body.message }}`\n{{ $json.body.stacktrace }}", "otherOptions": {} }, "id": "er-slack", "name": "Alertar Slack", "type": "n8n-nodes-base.slack", "typeVersion": 2.3, "position": [220, 0] },
+    { "parameters": { "respondWith": "json", "responseBody": "={\"ok\":true}", "options": {} }, "id": "er-resp", "name": "Confirmar", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.1, "position": [480, 0] }
+  ],
+  "connections": { "Webhook Error": { "main": [[{ "node": "Nivel Error?", "type": "main", "index": 0 }]] }, "Nivel Error?": { "main": [[{ "node": "Alertar Slack", "type": "main", "index": 0 }], []] }, "Alertar Slack": { "main": [[{ "node": "Confirmar", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

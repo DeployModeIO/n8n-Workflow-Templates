@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://USER.github.io/n8n-workflow-templates/sitemap.xml

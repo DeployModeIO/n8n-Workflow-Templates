@@ -1,0 +1,10 @@
+{
+  "name": "Marketing - Sync Suscriptores a Mailchimp",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "hours", "hoursInterval": 12 }] }, "options": {} }, "id": "mc-sched", "name": "Cada 12h", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-280, 0] },
+    { "parameters": { "operation": "read", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Suscriptores" }, "options": {} }, "id": "mc-sheets", "name": "Leer Suscriptores", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-40, 0] },
+    { "parameters": { "resource": "member", "operation": "upsert", "listId": "TU_LIST_ID", "email": "={{ $json.email }}", "status": "subscribed", "options": { "mergeFields": { "FNAME": "={{ $json.nombre }}" } } }, "id": "mc-add", "name": "Añadir Mailchimp", "type": "n8n-nodes-base.mailchimp", "typeVersion": 1, "position": [220, 0] }
+  ],
+  "connections": { "Cada 12h": { "main": [[{ "node": "Leer Suscriptores", "type": "main", "index": 0 }]] }, "Leer Suscriptores": { "main": [[{ "node": "Añadir Mailchimp", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

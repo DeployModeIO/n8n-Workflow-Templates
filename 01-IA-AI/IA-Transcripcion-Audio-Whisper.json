@@ -1,0 +1,69 @@
+{
+  "name": "IA - Transcripcion de Audio (Whisper)",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "transcribir", "responseMode": "responseNode", "options": {} },
+      "id": "wh-wsp-001",
+      "name": "Webhook Audio",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-220, 0],
+      "webhookId": "transcribir"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.url_audio }}",
+        "options": { "response": { "response": { "responseFormat": "file" } } }
+      },
+      "id": "http-dl-001",
+      "name": "Descargar Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/audio/transcriptions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "contentType": "multipart-form-data",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "model", "value": "whisper-1" },
+            { "name": "language", "value": "es" },
+            { "parameterType": "n8nBinaryFile", "name": "file", "inputDataFieldName": "data" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-wsp-001",
+      "name": "Whisper API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"transcripcion\": {{ JSON.stringify($json.text) }}\n}",
+        "options": {}
+      },
+      "id": "resp-wsp-001",
+      "name": "Responder",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [440, 0]
+    }
+  ],
+  "connections": {
+    "Webhook Audio": { "main": [[{ "node": "Descargar Audio", "type": "main", "index": 0 }]] },
+    "Descargar Audio": { "main": [[{ "node": "Whisper API", "type": "main", "index": 0 }]] },
+    "Whisper API": { "main": [[{ "node": "Responder", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

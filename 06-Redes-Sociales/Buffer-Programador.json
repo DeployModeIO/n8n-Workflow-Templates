@@ -1,0 +1,10 @@
+{
+  "name": "Redes - Programador con Buffer",
+  "nodes": [
+    { "parameters": { "pollTimes": { "item": [{ "mode": "everyMinute" }] }, "filters": { "includeSpamTrash": false }, "options": {} }, "id": "bf-trg", "name": "Gmail Trigger", "type": "n8n-nodes-base.gmailTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "conditions": { "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "b1", "leftValue": "={{ $json.subject }}", "rightValue": "[publicar]", "operator": { "type": "string", "operation": "contains" } } ], "combinator": "and" }, "options": {} }, "id": "bf-if", "name": "Tiene Tag?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [-20, 0] },
+    { "parameters": { "method": "POST", "url": "https://api.bufferapp.com/1/updates/create.json", "authentication": "predefinedCredentialType", "nodeCredentialType": "bufferApi", "sendBody": true, "bodyParameters": { "parameters": [ { "name": "profile_ids[]", "value": "TU_PROFILE_ID" }, { "name": "text", "value": "={{ $('Gmail Trigger').item.json.textPlain }}" } ] }, "options": {} }, "id": "bf-send", "name": "Programar Buffer", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [240, 0] }
+  ],
+  "connections": { "Gmail Trigger": { "main": [[{ "node": "Tiene Tag?", "type": "main", "index": 0 }]] }, "Tiene Tag?": { "main": [[{ "node": "Programar Buffer", "type": "main", "index": 0 }], []] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Redes - Publicar en LinkedIn desde Sheets",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "days", "triggerAtHour": 10 }] }, "options": {} }, "id": "li-sched", "name": "Cada Dia 10am", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-280, 0] },
+    { "parameters": { "operation": "read", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Posts" }, "options": {} }, "id": "li-sheets", "name": "Leer Posts", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-40, 0] },
+    { "parameters": { "conditions": { "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "l1", "leftValue": "={{ $json.estado }}", "rightValue": "pendiente", "operator": { "type": "string", "operation": "equals" } } ], "combinator": "and" }, "options": {} }, "id": "li-if", "name": "Pendiente?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [200, 0] },
+    { "parameters": { "resource": "post", "operation": "create", "person": "me", "text": "={{ $json.contenido }}", "additionalFields": {} }, "id": "li-post", "name": "Publicar LinkedIn", "type": "n8n-nodes-base.linkedIn", "typeVersion": 1, "position": [460, 0] }
+  ],
+  "connections": { "Cada Dia 10am": { "main": [[{ "node": "Leer Posts", "type": "main", "index": 0 }]] }, "Leer Posts": { "main": [[{ "node": "Pendiente?", "type": "main", "index": 0 }]] }, "Pendiente?": { "main": [[{ "node": "Publicar LinkedIn", "type": "main", "index": 0 }], []] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

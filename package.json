@@ -1,0 +1,43 @@
+{
+  "name": "n8n-workflow-templates",
+  "version": "1.0.0",
+  "description": "Biblioteca de plantillas de automatizacion para n8n: 51+ workflows en 9 categorias, con diagramas profesionales, wizard interactivo y toolbox de herramientas open-source.",
+  "keywords": [
+    "n8n",
+    "workflow",
+    "automation",
+    "templates",
+    "open-source",
+    "self-hosted",
+    "industrial",
+    "oil-gas",
+    "iot",
+    "ai",
+    "rag",
+    "scada"
+  ],
+  "license": "MIT",
+  "author": "",
+  "homepage": "https://github.com/USER/n8n-workflow-templates",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USER/n8n-workflow-templates.git"
+  },
+  "bugs": {
+    "url": "https://github.com/USER/n8n-workflow-templates/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node tests/validate.js",
+    "build:diagrams": "node build-all.js",
+    "build": "npm run build:diagrams && npm test",
+    "lint:json": "node tests/validate.js --json-only",
+    "serve": "npx http-server . -p 3000 -c-1 --cors",
+    "count": "node -e \"const fs=require('fs'),p=require('path');eval(fs.readFileSync('data.js','utf8'));console.log('Plantillas:',TEMPLATES.length,'| Categorias:',Object.keys(CATS).length);\"",
+    "validate": "npm test",
+    "precommit": "npm run build && npm test"
+  },
+  "devDependencies": {}
+}

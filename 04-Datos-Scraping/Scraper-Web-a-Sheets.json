@@ -1,0 +1,11 @@
+{
+  "name": "Datos - Scraper Web a Google Sheets",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "hours", "hoursInterval": 6 }] }, "options": {} }, "id": "sc-sched", "name": "Cada 6h", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-280, 0] },
+    { "parameters": { "url": "https://example.com/productos", "options": { "response": { "response": { "responseFormat": "text" } } } }, "id": "sc-http", "name": "Descargar HTML", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-40, 0] },
+    { "parameters": { "operation": "extractHtmlContent", "extractionValues": { "values": [ { "key": "titulos", "cssSelector": ".product-title", "returnValue": "text" } ] }, "options": {} }, "id": "sc-html", "name": "Extraer Datos", "type": "n8n-nodes-base.html", "typeVersion": 1.2, "position": [200, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Scraping" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "sc-sheets", "name": "Guardar Sheets", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [440, 0] }
+  ],
+  "connections": { "Cada 6h": { "main": [[{ "node": "Descargar HTML", "type": "main", "index": 0 }]] }, "Descargar HTML": { "main": [[{ "node": "Extraer Datos", "type": "main", "index": 0 }]] }, "Extraer Datos": { "main": [[{ "node": "Guardar Sheets", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

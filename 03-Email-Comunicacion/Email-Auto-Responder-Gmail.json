@@ -1,0 +1,10 @@
+{
+  "name": "Email - Auto-Responder Gmail con IA",
+  "nodes": [
+    { "parameters": { "pollTimes": { "item": [{ "mode": "everyMinute" }] }, "filters": { "readStatus": "unread" }, "options": {} }, "id": "g-trg", "name": "Gmail Trigger", "type": "n8n-nodes-base.gmailTrigger", "typeVersion": 1.2, "position": [-240, 0] },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/chat/completions", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\"role\":\"system\",\"content\":\"Redacta una respuesta profesional y breve en español para este email.\"},\n    {\"role\":\"user\",\"content\":{{ JSON.stringify(($('Gmail Trigger').item.json.textPlain || $('Gmail Trigger').item.json.snippet)) }}}\n  ]\n}", "options": {} }, "id": "g-ai", "name": "Redactar IA", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [0, 0] },
+    { "parameters": { "resource": "message", "operation": "reply", "messageId": "={{ $('Gmail Trigger').item.json.id }}", "sendTo": "={{ $('Gmail Trigger').item.json.from }}", "subject": "={{ 'Re: ' + $('Gmail Trigger').item.json.subject }}", "messageType": "text", "message": "={{ $json.choices[0].message.content }}", "options": {} }, "id": "g-send", "name": "Responder Email", "type": "n8n-nodes-base.gmail", "typeVersion": 2.1, "position": [260, 0] }
+  ],
+  "connections": { "Gmail Trigger": { "main": [[{ "node": "Redactar IA", "type": "main", "index": 0 }]] }, "Redactar IA": { "main": [[{ "node": "Responder Email", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

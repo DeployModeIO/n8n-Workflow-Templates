@@ -1,0 +1,10 @@
+{
+  "name": "Datos - Agregador RSS a Telegram",
+  "nodes": [
+    { "parameters": { "url": "https://feeds.example.com/noticias", "options": {} }, "id": "rss", "name": "RSS Feed", "type": "n8n-nodes-base.rssFeedReadTrigger", "typeVersion": 1, "position": [-220, 0] },
+    { "parameters": { "assignments": { "assignments": [ { "id": "r1", "name": "titulo", "value": "={{ $json.title }}", "type": "string" }, { "id": "r2", "name": "link", "value": "={{ $json.link }}", "type": "string" } ] }, "options": {} }, "id": "rss-set", "name": "Limpiar", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [20, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=📰 *{{ $json.titulo }}*\n{{ $json.link }}", "additionalFields": { "parse_mode": "Markdown" } }, "id": "rss-tg", "name": "Publicar Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [260, 0] }
+  ],
+  "connections": { "RSS Feed": { "main": [[{ "node": "Limpiar", "type": "main", "index": 0 }]] }, "Limpiar": { "main": [[{ "node": "Publicar Telegram", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

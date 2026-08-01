@@ -1,0 +1,11 @@
+{
+  "name": "Industrial - Orden de Trabajo Maestranza",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "ot", "options": {} }, "id": "ot-wh", "name": "Nueva OT", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-320, 0], "webhookId": "orden-maestranza" },
+    { "parameters": { "assignments": { "assignments": [ { "id": "o1", "name": "ot", "value": "=OT-{{ $now.toFormat('yyyyLLddHHmmss') }}", "type": "string" }, { "id": "o2", "name": "equipo", "value": "={{ $json.body.equipo }}", "type": "string" }, { "id": "o3", "name": "falla", "value": "={{ $json.body.falla }}", "type": "string" }, { "id": "o4", "name": "prioridad", "value": "={{ $json.body.prioridad || 'media' }}", "type": "string" }, { "id": "o5", "name": "estado", "value": "ABIERTA", "type": "string" }, { "id": "o6", "name": "fecha", "value": "={{ $now.toISO() }}", "type": "string" } ] }, "options": {} }, "id": "ot-set", "name": "Generar OT", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [-80, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "OrdenesTrabajo" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "ot-sheets", "name": "Registrar OT", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [160, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=🔧 NUEVA ORDEN DE TRABAJO {{ $json.ot }}\nEquipo: {{ $json.equipo }}\nFalla: {{ $json.falla }}\nPrioridad: {{ $json.prioridad }}\nAsignar a cuadrilla de maestranza", "additionalFields": {} }, "id": "ot-tg", "name": "Avisar Maestranza", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [420, 0] }
+  ],
+  "connections": { "Nueva OT": { "main": [[{ "node": "Generar OT", "type": "main", "index": 0 }]] }, "Generar OT": { "main": [[{ "node": "Registrar OT", "type": "main", "index": 0 }]] }, "Registrar OT": { "main": [[{ "node": "Avisar Maestranza", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

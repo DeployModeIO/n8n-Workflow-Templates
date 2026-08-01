@@ -1,0 +1,11 @@
+{
+  "name": "Datos - Procesamiento de CSV",
+  "nodes": [
+    { "parameters": { "operation": "read", "fileSelector": "C:/datos/ventas.csv", "options": {} }, "id": "csv-read", "name": "Leer CSV", "type": "n8n-nodes-base.readWriteFile", "typeVersion": 1, "position": [-240, 0] },
+    { "parameters": { "operation": "fromCsv", "options": {} }, "id": "csv-parse", "name": "Parsear CSV", "type": "n8n-nodes-base.spreadsheetFile", "typeVersion": 2, "position": [0, 0] },
+    { "parameters": { "jsCode": "// Agrega totales por categoria\nconst totales = {};\nfor (const item of $input.all()) {\n  const { categoria, monto } = item.json;\n  totales[categoria] = (totales[categoria] || 0) + Number(monto);\n}\nreturn Object.entries(totales).map(([categoria, total]) => ({ json: { categoria, total } }));" }, "id": "csv-code", "name": "Agregar", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [240, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Resumen" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "csv-sheets", "name": "Guardar Resumen", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [480, 0] }
+  ],
+  "connections": { "Leer CSV": { "main": [[{ "node": "Parsear CSV", "type": "main", "index": 0 }]] }, "Parsear CSV": { "main": [[{ "node": "Agregar", "type": "main", "index": 0 }]] }, "Agregar": { "main": [[{ "node": "Guardar Resumen", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

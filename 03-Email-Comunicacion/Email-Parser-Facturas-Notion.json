@@ -1,0 +1,11 @@
+{
+  "name": "Email - Parser de Facturas a Notion",
+  "nodes": [
+    { "parameters": { "pollTimes": { "item": [{ "mode": "everyMinute" }] }, "filters": { "includeSpamTrash": false }, "options": {} }, "id": "n-trg", "name": "Gmail Trigger", "type": "n8n-nodes-base.gmailTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "conditions": { "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "c1", "leftValue": "={{ $json.subject }}", "rightValue": "factura", "operator": { "type": "string", "operation": "contains" } } ], "combinator": "and" }, "options": {} }, "id": "n-if", "name": "Es Factura?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [-20, 0] },
+    { "parameters": { "assignments": { "assignments": [ { "id": "a1", "name": "remitente", "value": "={{ $json.from }}", "type": "string" }, { "id": "a2", "name": "asunto", "value": "={{ $json.subject }}", "type": "string" }, { "id": "a3", "name": "fecha", "value": "={{ $now.toISO() }}", "type": "string" } ] }, "options": {} }, "id": "n-set", "name": "Extraer Datos", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [220, 0] },
+    { "parameters": { "operation": "create", "databaseId": { "__rl": true, "mode": "id", "value": "TU_DATABASE_ID" }, "title": "={{ $json.asunto }}", "options": {} }, "id": "n-notion", "name": "Guardar Notion", "type": "n8n-nodes-base.notion", "typeVersion": 2.2, "position": [460, 0] }
+  ],
+  "connections": { "Gmail Trigger": { "main": [[{ "node": "Es Factura?", "type": "main", "index": 0 }]] }, "Es Factura?": { "main": [[{ "node": "Extraer Datos", "type": "main", "index": 0 }], []] }, "Extraer Datos": { "main": [[{ "node": "Guardar Notion", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

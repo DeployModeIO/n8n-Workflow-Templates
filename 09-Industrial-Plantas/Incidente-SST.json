@@ -1,0 +1,12 @@
+{
+  "name": "Industrial - Reporte de Incidente SST",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "incidente", "options": {} }, "id": "inc-wh", "name": "Reportar Incidente", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-320, 0], "webhookId": "incidente-sst" },
+    { "parameters": { "jsCode": "const b = $input.first().json.body;\nconst sev = (b.severidad || 'menor').toLowerCase();\nconst orden = { menor: 1, primer_auxilio: 2, incapacitante: 3, fatal: 4 };\nreturn [{ json: { ...b, fecha: new Date().toISOString(), severidad: sev, escalar: (orden[sev] || 1) >= 2 } }];" }, "id": "inc-code", "name": "Clasificar Severidad", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [-80, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Incidentes" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "inc-sheets", "name": "Registrar", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [160, 0] },
+    { "parameters": { "conditions": { "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "i1", "leftValue": "={{ $json.escalar }}", "rightValue": true, "operator": { "type": "boolean", "operation": "true" } } ], "combinator": "and" }, "options": {} }, "id": "inc-if", "name": "Escalar?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [400, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=🚑 INCIDENTE SST - ESCALADO\nPlanta: {{ $json.planta }}\nSeveridad: {{ $json.severidad }}\nDescripcion: {{ $json.descripcion }}\nInvolucrado: {{ $json.involucrado }}\nActivar protocolo de investigacion", "additionalFields": {} }, "id": "inc-tg", "name": "Escalar Gerencia", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [660, -80] }
+  ],
+  "connections": { "Reportar Incidente": { "main": [[{ "node": "Clasificar Severidad", "type": "main", "index": 0 }]] }, "Clasificar Severidad": { "main": [[{ "node": "Registrar", "type": "main", "index": 0 }]] }, "Registrar": { "main": [[{ "node": "Escalar?", "type": "main", "index": 0 }]] }, "Escalar?": { "main": [[{ "node": "Escalar Gerencia", "type": "main", "index": 0 }], []] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

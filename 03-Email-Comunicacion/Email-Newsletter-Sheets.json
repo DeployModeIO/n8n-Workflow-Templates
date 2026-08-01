@@ -1,0 +1,10 @@
+{
+  "name": "Email - Newsletter desde Google Sheets",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "weeks", "triggerAtDay": [1], "triggerAtHour": 9 }] }, "options": {} }, "id": "nl-sched", "name": "Cada Lunes 9am", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "operation": "read", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Suscriptores" }, "options": {} }, "id": "nl-sheets", "name": "Leer Suscriptores", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-20, 0] },
+    { "parameters": { "fromEmail": "noreply@tudominio.com", "toEmail": "={{ $json.email }}", "subject": "📰 Newsletter semanal", "emailFormat": "html", "html": "=<h1>Novedades de la semana</h1><p>Hola {{ $json.nombre }}, este es tu resumen semanal.</p>", "options": {} }, "id": "nl-send", "name": "Enviar Email", "type": "n8n-nodes-base.emailSend", "typeVersion": 2.1, "position": [240, 0] }
+  ],
+  "connections": { "Cada Lunes 9am": { "main": [[{ "node": "Leer Suscriptores", "type": "main", "index": 0 }]] }, "Leer Suscriptores": { "main": [[{ "node": "Enviar Email", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

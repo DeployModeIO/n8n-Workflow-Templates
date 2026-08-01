@@ -1,0 +1,11 @@
+{
+  "name": "DevOps - Monitor de Certificados SSL",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "days", "triggerAtHour": 8 }] }, "options": {} }, "id": "ssl-sched", "name": "Cada Dia 8am", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-280, 0] },
+    { "parameters": { "url": "https://api.example.com/ssl-check?domain=tudominio.com", "options": {} }, "id": "ssl-http", "name": "Consultar SSL", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-40, 0] },
+    { "parameters": { "conditions": { "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "s1", "leftValue": "={{ $json.dias_restantes }}", "rightValue": 30, "operator": { "type": "number", "operation": "lt" } } ], "combinator": "and" }, "options": {} }, "id": "ssl-if", "name": "Por Expirar?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [200, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=🔐 ALERTA SSL: el certificado de {{ $json.dominio }} expira en {{ $json.dias_restantes }} días", "additionalFields": {} }, "id": "ssl-tg", "name": "Alertar Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [460, -80] }
+  ],
+  "connections": { "Cada Dia 8am": { "main": [[{ "node": "Consultar SSL", "type": "main", "index": 0 }]] }, "Consultar SSL": { "main": [[{ "node": "Por Expirar?", "type": "main", "index": 0 }]] }, "Por Expirar?": { "main": [[{ "node": "Alertar Telegram", "type": "main", "index": 0 }], []] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

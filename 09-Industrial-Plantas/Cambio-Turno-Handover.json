@@ -1,0 +1,11 @@
+{
+  "name": "Industrial - Cambio de Turno (Handover)",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "triggerAtHour": 7 }, { "triggerAtHour": 15 }, { "triggerAtHour": 23 }] }, "options": {} }, "id": "ho-sched", "name": "Cambios de Turno", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-320, 0] },
+    { "parameters": { "operation": "read", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Bitacora" }, "options": {} }, "id": "ho-read", "name": "Leer Pendientes", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-80, 0] },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/chat/completions", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"gpt-4o-mini\",\n  \"messages\":[\n    {\"role\":\"system\",\"content\":\"Redacta un reporte de entrega de turno industrial: resume eventos, resalta pendientes criticos y acciones para el turno entrante. Formato claro y breve.\"},\n    {\"role\":\"user\",\"content\":\"Eventos del turno saliente:\\n{{ JSON.stringify($json) }}\"}\n  ]\n}", "options": {} }, "id": "ho-ai", "name": "Resumir con IA", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [160, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=🔄 ENTREGA DE TURNO\n{{ $json.choices[0].message.content }}", "additionalFields": {} }, "id": "ho-tg", "name": "Enviar Handover", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [420, 0] }
+  ],
+  "connections": { "Cambios de Turno": { "main": [[{ "node": "Leer Pendientes", "type": "main", "index": 0 }]] }, "Leer Pendientes": { "main": [[{ "node": "Resumir con IA", "type": "main", "index": 0 }]] }, "Resumir con IA": { "main": [[{ "node": "Enviar Handover", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

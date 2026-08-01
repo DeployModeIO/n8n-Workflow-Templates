@@ -1,0 +1,11 @@
+{
+  "name": "Marketing - Follow-up de Webinar",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "webinar", "options": {} }, "id": "wb-wh", "name": "Webhook Registro", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-300, 0], "webhookId": "webinar-reg" },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Asistentes" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "wb-sheets", "name": "Registrar", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-60, 0] },
+    { "parameters": { "amount": 1, "unit": "days" }, "id": "wb-wait", "name": "Esperar 1 dia", "type": "n8n-nodes-base.wait", "typeVersion": 1.1, "position": [180, 0], "webhookId": "webinar-wait" },
+    { "parameters": { "fromEmail": "eventos@tudominio.com", "toEmail": "={{ $('Webhook Registro').item.json.body.email }}", "subject": "🎥 Gracias por asistir al webinar", "emailFormat": "html", "html": "=<p>Hola {{ $('Webhook Registro').item.json.body.nombre }}, aquí tienes la grabación y los recursos.</p>", "options": {} }, "id": "wb-mail", "name": "Enviar Follow-up", "type": "n8n-nodes-base.emailSend", "typeVersion": 2.1, "position": [420, 0] }
+  ],
+  "connections": { "Webhook Registro": { "main": [[{ "node": "Registrar", "type": "main", "index": 0 }]] }, "Registrar": { "main": [[{ "node": "Esperar 1 dia", "type": "main", "index": 0 }]] }, "Esperar 1 dia": { "main": [[{ "node": "Enviar Follow-up", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

@@ -1,0 +1,69 @@
+{
+  "name": "IA - Generador de Contenido para Redes",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "days", "daysInterval": 1 }] },
+        "options": {}
+      },
+      "id": "sched-001",
+      "name": "Cada Dia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-240, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "t1", "name": "tema", "value": "productividad y automatizacion", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-tema-001",
+      "name": "Definir Tema",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-20, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\"role\": \"system\", \"content\": \"Eres un community manager. Genera un post atractivo para redes sociales con emojis y hashtags.\"},\n    {\"role\": \"user\", \"content\": \"Escribe un post sobre: {{ $json.tema }}\"}\n  ]\n}",
+        "options": {}
+      },
+      "id": "http-gen-001",
+      "name": "Generar Post IA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "TU_CHAT_ID",
+        "text": "=📝 Post del dia:\n\n{{ $json.choices[0].message.content }}",
+        "additionalFields": {}
+      },
+      "id": "tg-001",
+      "name": "Enviar a Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [460, 0]
+    }
+  ],
+  "connections": {
+    "Cada Dia": { "main": [[{ "node": "Definir Tema", "type": "main", "index": 0 }]] },
+    "Definir Tema": { "main": [[{ "node": "Generar Post IA", "type": "main", "index": 0 }]] },
+    "Generar Post IA": { "main": [[{ "node": "Enviar a Telegram", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

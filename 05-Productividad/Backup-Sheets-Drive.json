@@ -1,0 +1,11 @@
+{
+  "name": "Productividad - Backup Diario de Sheets a Drive",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "days", "triggerAtHour": 2 }] }, "options": {} }, "id": "bk-sched", "name": "Cada Dia 2am", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "operation": "read", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Datos" }, "options": {} }, "id": "bk-read", "name": "Leer Sheets", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-20, 0] },
+    { "parameters": { "operation": "convertToFile", "options": { "fileName": "={{ 'backup_' + $now.toFormat('yyyyLLdd') + '.csv' }}" } }, "id": "bk-conv", "name": "A CSV", "type": "n8n-nodes-base.convertToFile", "typeVersion": 1.1, "position": [220, 0] },
+    { "parameters": { "operation": "upload", "name": "={{ 'backup_' + $now.toFormat('yyyyLLdd') + '.csv' }}", "driveId": { "__rl": true, "mode": "list", "value": "My Drive" }, "folderId": { "__rl": true, "mode": "list", "value": "Backups" }, "inputDataFieldName": "data", "options": {} }, "id": "bk-drive", "name": "Subir a Drive", "type": "n8n-nodes-base.googleDrive", "typeVersion": 3, "position": [460, 0] }
+  ],
+  "connections": { "Cada Dia 2am": { "main": [[{ "node": "Leer Sheets", "type": "main", "index": 0 }]] }, "Leer Sheets": { "main": [[{ "node": "A CSV", "type": "main", "index": 0 }]] }, "A CSV": { "main": [[{ "node": "Subir a Drive", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

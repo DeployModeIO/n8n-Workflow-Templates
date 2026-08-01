@@ -1,0 +1,11 @@
+{
+  "name": "Industrial - Reporte Diario de Produccion con IA",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "triggerAtHour": 6 }] }, "options": {} }, "id": "rp-sched", "name": "Cierre de Turno", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-320, 0] },
+    { "parameters": { "operation": "read", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "KPI_Produccion" }, "options": {} }, "id": "rp-read", "name": "Leer KPIs", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [-80, 0] },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/chat/completions", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"gpt-4o-mini\",\n  \"messages\":[\n    {\"role\":\"system\",\"content\":\"Eres un ingeniero de produccion. Redacta un reporte diario de planta: produccion vs meta, OEE/disponibilidad, desviaciones, consumos y 3 acciones correctivas. Tono tecnico y breve.\"},\n    {\"role\":\"user\",\"content\":\"KPIs del dia:\\n{{ JSON.stringify($json) }}\"}\n  ]\n}", "options": {} }, "id": "rp-ai", "name": "Analizar con IA", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [160, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=📊 REPORTE DIARIO DE PRODUCCION\n{{ $json.choices[0].message.content }}", "additionalFields": {} }, "id": "rp-tg", "name": "Enviar Reporte", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [420, 0] }
+  ],
+  "connections": { "Cierre de Turno": { "main": [[{ "node": "Leer KPIs", "type": "main", "index": 0 }]] }, "Leer KPIs": { "main": [[{ "node": "Analizar con IA", "type": "main", "index": 0 }]] }, "Analizar con IA": { "main": [[{ "node": "Enviar Reporte", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

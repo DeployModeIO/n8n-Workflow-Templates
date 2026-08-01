@@ -1,0 +1,9 @@
+{
+  "name": "Redes - Notificaciones a Discord",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "discord", "options": {} }, "id": "dc-wh", "name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-220, 0], "webhookId": "discord-notify" },
+    { "parameters": { "authentication": "webhook", "webhookUrl": "TU_DISCORD_WEBHOOK_URL", "content": "=🔔 **{{ $json.body.titulo }}**\n{{ $json.body.descripcion }}", "options": {} }, "id": "dc-send", "name": "Enviar Discord", "type": "n8n-nodes-base.discord", "typeVersion": 2, "position": [40, 0] }
+  ],
+  "connections": { "Webhook": { "main": [[{ "node": "Enviar Discord", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

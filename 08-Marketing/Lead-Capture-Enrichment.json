@@ -1,0 +1,11 @@
+{
+  "name": "Marketing - Captura y Enriquecimiento de Leads",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "lead", "options": {} }, "id": "mk-wh", "name": "Webhook Lead", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-300, 0], "webhookId": "marketing-lead" },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/chat/completions", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"gpt-4o-mini\",\n  \"response_format\":{\"type\":\"json_object\"},\n  \"messages\":[\n    {\"role\":\"system\",\"content\":\"Analiza este lead. Devuelve JSON {\\\"score\\\":0-100,\\\"sector\\\":\\\"...\\\",\\\"mensaje_personalizado\\\":\\\"...\\\"}\"},\n    {\"role\":\"user\",\"content\":{{ JSON.stringify($json.body) }}}\n  ]\n}", "options": {} }, "id": "mk-ai", "name": "Enriquecer IA", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-60, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "Leads" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "mk-sheets", "name": "Guardar Lead", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [200, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=🎯 Nuevo lead score {{ JSON.parse($json.choices[0].message.content).score }}/100", "additionalFields": {} }, "id": "mk-tg", "name": "Avisar Ventas", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [460, 0] }
+  ],
+  "connections": { "Webhook Lead": { "main": [[{ "node": "Enriquecer IA", "type": "main", "index": 0 }]] }, "Enriquecer IA": { "main": [[{ "node": "Guardar Lead", "type": "main", "index": 0 }]] }, "Guardar Lead": { "main": [[{ "node": "Avisar Ventas", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

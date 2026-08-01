@@ -1,0 +1,9 @@
+{
+  "name": "Comunicacion - Alertas por WhatsApp (Twilio)",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "alerta", "options": {} }, "id": "wa-wh", "name": "Webhook Alerta", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-220, 0], "webhookId": "alerta-whatsapp" },
+    { "parameters": { "resource": "message", "from": "whatsapp:+14155238886", "to": "whatsapp:+34600000000", "message": "=🚨 ALERTA: {{ $json.body.mensaje }}", "options": {} }, "id": "wa-send", "name": "Enviar WhatsApp", "type": "n8n-nodes-base.twilio", "typeVersion": 1, "position": [40, 0] }
+  ],
+  "connections": { "Webhook Alerta": { "main": [[{ "node": "Enviar WhatsApp", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

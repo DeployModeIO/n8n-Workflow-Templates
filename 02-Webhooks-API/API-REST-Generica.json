@@ -1,0 +1,44 @@
+{
+  "name": "API - Endpoint REST Generico",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "api", "responseMode": "responseNode", "options": {} },
+      "id": "wh-api-001",
+      "name": "Webhook API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-220, 0],
+      "webhookId": "api-generica"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Valida y transforma la entrada\nconst body = $input.first().json.body || {};\nif (!body.nombre) {\n  return [{ json: { ok: false, error: 'Falta campo nombre', status: 400 } }];\n}\nreturn [{ json: { ok: true, mensaje: `Hola ${body.nombre}`, recibido: body, status: 200 } }];"
+      },
+      "id": "code-api-001",
+      "name": "Procesar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [20, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": { "responseCode": "={{ $json.status || 200 }}" }
+      },
+      "id": "resp-api-001",
+      "name": "Responder",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [260, 0]
+    }
+  ],
+  "connections": {
+    "Webhook API": { "main": [[{ "node": "Procesar", "type": "main", "index": 0 }]] },
+    "Procesar": { "main": [[{ "node": "Responder", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

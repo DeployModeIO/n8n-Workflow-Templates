@@ -1,0 +1,11 @@
+{
+  "name": "Industrial - Cuadro de Turnos Rotativos",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "weeks", "triggerAtDay": [1], "triggerAtHour": 6 }] }, "options": {} }, "id": "ct-sched", "name": "Cada Lunes", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-320, 0] },
+    { "parameters": { "jsCode": "// Genera rotacion 4x3 (4 dias trabajo / 3 descanso) por operador\nconst operadores = ['Equipo A','Equipo B','Equipo C','Equipo D'];\nconst turnos = ['Manana (07-15)','Tarde (15-23)','Noche (23-07)'];\nconst out = [];\nconst inicio = new Date();\nfor (let d = 0; d < 7; d++) {\n  const fecha = new Date(inicio); fecha.setDate(inicio.getDate() + d);\n  turnos.forEach((t, ti) => {\n    const eq = operadores[(d + ti) % operadores.length];\n    out.push({ fecha: fecha.toISOString().slice(0,10), turno: t, equipo: eq });\n  });\n}\nreturn out.map(r => ({ json: r }));" }, "id": "ct-code", "name": "Generar Rotacion", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [-80, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "CuadroTurnos" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "ct-sheets", "name": "Publicar Cuadro", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [160, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=📅 Cuadro de turnos de la semana publicado. Revisa el spreadsheet.", "additionalFields": {} }, "id": "ct-tg", "name": "Notificar Equipos", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [420, 0] }
+  ],
+  "connections": { "Cada Lunes": { "main": [[{ "node": "Generar Rotacion", "type": "main", "index": 0 }]] }, "Generar Rotacion": { "main": [[{ "node": "Publicar Cuadro", "type": "main", "index": 0 }]] }, "Publicar Cuadro": { "main": [[{ "node": "Notificar Equipos", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

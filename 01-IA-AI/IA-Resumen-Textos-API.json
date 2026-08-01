@@ -1,0 +1,60 @@
+{
+  "name": "IA - Resumen de Textos (API)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "resumir",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh-resumen-001",
+      "name": "Webhook Entrada",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-220, 0],
+      "webhookId": "resumen-textos"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"messages\": [\n    {\"role\": \"system\", \"content\": \"Eres un asistente que resume textos de forma concisa en español.\"},\n    {\"role\": \"user\", \"content\": \"Resume el siguiente texto en 3 puntos clave:\\n\\n{{ $json.body.texto }}\"}\n  ]\n}",
+        "options": {}
+      },
+      "id": "http-openai-001",
+      "name": "OpenAI Resumen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [20, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"resumen\": {{ JSON.stringify($json.choices[0].message.content) }}\n}",
+        "options": {}
+      },
+      "id": "resp-001",
+      "name": "Responder",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [260, 0]
+    }
+  ],
+  "connections": {
+    "Webhook Entrada": {
+      "main": [[{ "node": "OpenAI Resumen", "type": "main", "index": 0 }]]
+    },
+    "OpenAI Resumen": {
+      "main": [[{ "node": "Responder", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

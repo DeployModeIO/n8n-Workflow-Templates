@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install n8n (for schema validation)
+        run: npm install -g n8n
+        continue-on-error: true
+
+      - name: Validate integrity (JSON + SVG + references)
+        run: node tests/validate.js
+
+      - name: Regenerate all diagrams
+        run: node build-all.js
+
+      - name: Re-validate after regeneration
+        run: node tests/validate.js
+
+      - name: Check for uncommitted SVG changes
+        run: |
+          git diff --exit-code -- '*.svg' || (echo "::error::SVGs desactualizados. Ejecuta 'npm run build:diagrams' y commitea los cambios." && exit 1)
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 📊 CI Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Métrica | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          node -e "
+            const fs=require('fs'),p=require('path');
+            eval(fs.readFileSync('data.js','utf8'));
+            console.log('| Plantillas | ' + TEMPLATES.length + ' |');
+            console.log('| Categorías | ' + Object.keys(CATS).length + ' |');
+          " >> $GITHUB_STEP_SUMMARY
+          echo "| Diagramas SVG | $(find . -name '*.svg' -not -path './node_modules/*' | wc -l) |" >> $GITHUB_STEP_SUMMARY

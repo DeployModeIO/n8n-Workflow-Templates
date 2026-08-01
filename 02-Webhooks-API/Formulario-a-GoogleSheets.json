@@ -1,0 +1,54 @@
+{
+  "name": "Webhook - Formulario a Google Sheets",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "lead", "options": {} },
+      "id": "wh-lead-001",
+      "name": "Webhook Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-220, 0],
+      "webhookId": "formulario-lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "f1", "name": "fecha", "value": "={{ $now.toISO() }}", "type": "string" },
+            { "id": "f2", "name": "nombre", "value": "={{ $json.body.nombre }}", "type": "string" },
+            { "id": "f3", "name": "email", "value": "={{ $json.body.email }}", "type": "string" },
+            { "id": "f4", "name": "mensaje", "value": "={{ $json.body.mensaje }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-lead-001",
+      "name": "Mapear Campos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" },
+        "sheetName": { "__rl": true, "mode": "name", "value": "Leads" },
+        "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] },
+        "options": {}
+      },
+      "id": "sheets-lead-001",
+      "name": "Guardar en Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [240, 0]
+    }
+  ],
+  "connections": {
+    "Webhook Form": { "main": [[{ "node": "Mapear Campos", "type": "main", "index": 0 }]] },
+    "Mapear Campos": { "main": [[{ "node": "Guardar en Sheets", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Datos - Sync Postgres a API",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "minutes", "minutesInterval": 15 }] }, "options": {} }, "id": "pg-sched", "name": "Cada 15min", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "operation": "executeQuery", "query": "SELECT id, nombre, email FROM clientes WHERE actualizado_en > NOW() - INTERVAL '15 minutes'" }, "id": "pg-query", "name": "Consultar Postgres", "type": "n8n-nodes-base.postgres", "typeVersion": 2.5, "position": [-20, 0] },
+    { "parameters": { "method": "POST", "url": "https://api.example.com/sync", "authentication": "predefinedCredentialType", "nodeCredentialType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json", "jsonBody": "={{ JSON.stringify($json) }}", "options": {} }, "id": "pg-http", "name": "Enviar a API", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [240, 0] }
+  ],
+  "connections": { "Cada 15min": { "main": [[{ "node": "Consultar Postgres", "type": "main", "index": 0 }]] }, "Consultar Postgres": { "main": [[{ "node": "Enviar a API", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

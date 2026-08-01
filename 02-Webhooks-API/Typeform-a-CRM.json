@@ -1,0 +1,10 @@
+{
+  "name": "Webhook - Typeform a CRM",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "typeform", "options": {} }, "id": "tf-wh", "name": "Webhook Typeform", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-280, 0], "webhookId": "typeform-resp" },
+    { "parameters": { "jsCode": "// Aplana las respuestas de Typeform\nconst answers = $input.first().json.body.form_response.answers || [];\nconst out = {};\nfor (const a of answers) {\n  const key = a.field.ref;\n  out[key] = a[a.type] || a.text || '';\n}\nout.email = out.email || '';\nreturn [{ json: out }];" }, "id": "tf-code", "name": "Aplanar Respuestas", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [-40, 0] },
+    { "parameters": { "resource": "contact", "operation": "create", "additionalFields": { "properties": { "properties": [ { "key": "email", "value": "={{ $json.email }}" } ] } } }, "id": "tf-crm", "name": "Crear Contacto CRM", "type": "n8n-nodes-base.hubspot", "typeVersion": 2.1, "position": [220, 0] }
+  ],
+  "connections": { "Webhook Typeform": { "main": [[{ "node": "Aplanar Respuestas", "type": "main", "index": 0 }]] }, "Aplanar Respuestas": { "main": [[{ "node": "Crear Contacto CRM", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

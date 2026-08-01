@@ -1,0 +1,11 @@
+{
+  "name": "IA - Extraccion de Datos de PDF",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "pdf", "options": {} }, "id": "pdf-wh", "name": "Webhook PDF", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-280, 0], "webhookId": "extraer-pdf" },
+    { "parameters": { "url": "={{ $json.body.url_pdf }}", "options": { "response": { "response": { "responseFormat": "file" } } } }, "id": "pdf-dl", "name": "Descargar PDF", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-40, 0] },
+    { "parameters": { "operation": "extractText", "options": {} }, "id": "pdf-extract", "name": "Extraer Texto", "type": "n8n-nodes-base.extractFromFile", "typeVersion": 1, "position": [200, 0] },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/chat/completions", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"gpt-4o-mini\",\n  \"response_format\":{\"type\":\"json_object\"},\n  \"messages\":[\n    {\"role\":\"system\",\"content\":\"Extrae datos estructurados del documento en JSON.\"},\n    {\"role\":\"user\",\"content\":{{ JSON.stringify($json.data) }}}\n  ]\n}", "options": {} }, "id": "pdf-ai", "name": "Estructurar IA", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [440, 0] }
+  ],
+  "connections": { "Webhook PDF": { "main": [[{ "node": "Descargar PDF", "type": "main", "index": 0 }]] }, "Descargar PDF": { "main": [[{ "node": "Extraer Texto", "type": "main", "index": 0 }]] }, "Extraer Texto": { "main": [[{ "node": "Estructurar IA", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

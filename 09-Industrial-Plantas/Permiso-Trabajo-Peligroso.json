@@ -1,0 +1,11 @@
+{
+  "name": "Industrial - Permiso de Trabajo Peligroso (PTW)",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "permiso", "options": {} }, "id": "ptw-wh", "name": "Solicitud Permiso", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-320, 0], "webhookId": "permiso-trabajo" },
+    { "parameters": { "assignments": { "assignments": [ { "id": "p1", "name": "folio", "value": "=PTW-{{ $now.toFormat('yyyyLLddHHmmss') }}", "type": "string" }, { "id": "p2", "name": "tipo", "value": "={{ $json.body.tipo }}", "type": "string" }, { "id": "p3", "name": "area", "value": "={{ $json.body.area }}", "type": "string" }, { "id": "p4", "name": "solicitante", "value": "={{ $json.body.solicitante }}", "type": "string" }, { "id": "p5", "name": "estado", "value": "PENDIENTE_APROBACION", "type": "string" } ] }, "options": {} }, "id": "ptw-set", "name": "Foliar", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [-80, 0] },
+    { "parameters": { "operation": "append", "documentId": { "__rl": true, "mode": "id", "value": "TU_SPREADSHEET_ID" }, "sheetName": { "__rl": true, "mode": "name", "value": "PermisosTrabajo" }, "columns": { "mappingMode": "autoMapInputData", "value": {}, "matchingColumns": [] }, "options": {} }, "id": "ptw-sheets", "name": "Registrar Permiso", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5, "position": [160, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=📋 NUEVO PERMISO DE TRABAJO {{ $json.folio }}\nTipo: {{ $json.tipo }} (caliente/altura/espacio confinado)\nArea: {{ $json.area }}\nSolicita: {{ $json.solicitante }}\n⏳ Requiere aprobacion del supervisor HSE", "additionalFields": {} }, "id": "ptw-tg", "name": "Notificar Aprobador", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [420, 0] }
+  ],
+  "connections": { "Solicitud Permiso": { "main": [[{ "node": "Foliar", "type": "main", "index": 0 }]] }, "Foliar": { "main": [[{ "node": "Registrar Permiso", "type": "main", "index": 0 }]] }, "Registrar Permiso": { "main": [[{ "node": "Notificar Aprobador", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

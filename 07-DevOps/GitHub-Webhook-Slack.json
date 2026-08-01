@@ -1,0 +1,10 @@
+{
+  "name": "DevOps - GitHub Webhook a Slack",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "github", "options": {} }, "id": "gh-wh", "name": "Webhook GitHub", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-260, 0], "webhookId": "github-events" },
+    { "parameters": { "conditions": { "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "g1", "leftValue": "={{ $json.headers['x-github-event'] }}", "rightValue": "push", "operator": { "type": "string", "operation": "equals" } } ], "combinator": "and" }, "options": {} }, "id": "gh-if", "name": "Es Push?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [-20, 0] },
+    { "parameters": { "select": "channel", "channelId": { "__rl": true, "mode": "name", "value": "dev" }, "text": "=📦 Push en *{{ $json.body.repository.full_name }}* por {{ $json.body.pusher.name }}: {{ $json.body.head_commit.message }}", "otherOptions": {} }, "id": "gh-slack", "name": "Notificar Slack", "type": "n8n-nodes-base.slack", "typeVersion": 2.3, "position": [240, 0] }
+  ],
+  "connections": { "Webhook GitHub": { "main": [[{ "node": "Es Push?", "type": "main", "index": 0 }]] }, "Es Push?": { "main": [[{ "node": "Notificar Slack", "type": "main", "index": 0 }], []] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

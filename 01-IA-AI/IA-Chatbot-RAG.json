@@ -1,0 +1,12 @@
+{
+  "name": "IA - Chatbot RAG con Base de Conocimiento",
+  "nodes": [
+    { "parameters": { "updates": ["message"], "additionalFields": {} }, "id": "rag-trg", "name": "Telegram Trigger", "type": "n8n-nodes-base.telegramTrigger", "typeVersion": 1.2, "position": [-300, 0] },
+    { "parameters": { "method": "POST", "url": "http://localhost:11434/api/embeddings", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"nomic-embed-text\",\n  \"prompt\":{{ JSON.stringify($json.message.text) }}\n}", "options": {} }, "id": "rag-embed", "name": "Embedding", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-60, 0] },
+    { "parameters": { "operation": "executeQuery", "query": "=SELECT contenido FROM docs ORDER BY embedding <=> '{{ JSON.stringify($json.embedding) }}' LIMIT 3" }, "id": "rag-pg", "name": "Buscar Contexto", "type": "n8n-nodes-base.postgres", "typeVersion": 2.5, "position": [180, 0] },
+    { "parameters": { "method": "POST", "url": "http://localhost:11434/api/chat", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"llama3\",\n  \"messages\":[\n    {\"role\":\"system\",\"content\":\"Responde usando este contexto: {{ JSON.stringify($json) }}\"},\n    {\"role\":\"user\",\"content\":{{ JSON.stringify($('Telegram Trigger').item.json.message.text) }}}\n  ]\n}", "options": {} }, "id": "rag-llm", "name": "Responder LLM", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [420, 0] },
+    { "parameters": { "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}", "text": "={{ $json.message.content }}", "additionalFields": {} }, "id": "rag-send", "name": "Enviar Respuesta", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [660, 0] }
+  ],
+  "connections": { "Telegram Trigger": { "main": [[{ "node": "Embedding", "type": "main", "index": 0 }]] }, "Embedding": { "main": [[{ "node": "Buscar Contexto", "type": "main", "index": 0 }]] }, "Buscar Contexto": { "main": [[{ "node": "Responder LLM", "type": "main", "index": 0 }]] }, "Responder LLM": { "main": [[{ "node": "Enviar Respuesta", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

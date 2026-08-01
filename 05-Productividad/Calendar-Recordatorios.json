@@ -1,0 +1,10 @@
+{
+  "name": "Productividad - Recordatorios de Google Calendar",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "minutes", "minutesInterval": 30 }] }, "options": {} }, "id": "cal-sched", "name": "Cada 30min", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "resource": "event", "operation": "getAll", "calendar": "primary", "options": { "timeMin": "={{ $now.toISO() }}", "timeMax": "={{ $now.plus({hours:1}).toISO() }}" } }, "id": "cal-get", "name": "Proximos Eventos", "type": "n8n-nodes-base.googleCalendar", "typeVersion": 1.3, "position": [-20, 0] },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=⏰ Recordatorio: *{{ $json.summary }}* a las {{ $json.start.dateTime }}", "additionalFields": { "parse_mode": "Markdown" } }, "id": "cal-tg", "name": "Avisar Telegram", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [240, 0] }
+  ],
+  "connections": { "Cada 30min": { "main": [[{ "node": "Proximos Eventos", "type": "main", "index": 0 }]] }, "Proximos Eventos": { "main": [[{ "node": "Avisar Telegram", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

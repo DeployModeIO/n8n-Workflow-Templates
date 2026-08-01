@@ -1,0 +1,10 @@
+{
+  "name": "Redes - Bot de Telegram con Comandos",
+  "nodes": [
+    { "parameters": { "updates": ["message"], "additionalFields": {} }, "id": "tg-trg", "name": "Telegram Trigger", "type": "n8n-nodes-base.telegramTrigger", "typeVersion": 1.2, "position": [-260, 0] },
+    { "parameters": { "jsCode": "const text = ($input.first().json.message.text || '').toLowerCase();\nconst chatId = $input.first().json.message.chat.id;\nlet reply = 'Comando no reconocido. Usa /help';\nif (text === '/start') reply = 'Bienvenido al bot 👋';\nelse if (text === '/help') reply = 'Comandos: /start, /hora, /help';\nelse if (text === '/hora') reply = 'Hora: ' + new Date().toLocaleString('es-ES');\nreturn [{ json: { chatId, reply } }];" }, "id": "tg-code", "name": "Procesar Comando", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [-20, 0] },
+    { "parameters": { "chatId": "={{ $json.chatId }}", "text": "={{ $json.reply }}", "additionalFields": {} }, "id": "tg-send", "name": "Responder", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [240, 0] }
+  ],
+  "connections": { "Telegram Trigger": { "main": [[{ "node": "Procesar Comando", "type": "main", "index": 0 }]] }, "Procesar Comando": { "main": [[{ "node": "Responder", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

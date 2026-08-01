@@ -1,0 +1,10 @@
+{
+  "name": "IA - Generacion de Imagenes (DALL-E)",
+  "nodes": [
+    { "parameters": { "httpMethod": "POST", "path": "imagen", "responseMode": "responseNode", "options": {} }, "id": "img-wh", "name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [-240, 0], "webhookId": "generar-imagen" },
+    { "parameters": { "method": "POST", "url": "https://api.openai.com/v1/images/generations", "authentication": "predefinedCredentialType", "nodeCredentialType": "openAiApi", "sendBody": true, "specifyBody": "json", "jsonBody": "={\n  \"model\":\"dall-e-3\",\n  \"prompt\":{{ JSON.stringify($json.body.prompt) }},\n  \"n\":1,\n  \"size\":\"1024x1024\"\n}", "options": {} }, "id": "img-ai", "name": "Generar DALL-E", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [0, 0] },
+    { "parameters": { "respondWith": "json", "responseBody": "={\n  \"url_imagen\": {{ JSON.stringify($json.data[0].url) }}\n}", "options": {} }, "id": "img-resp", "name": "Responder", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.1, "position": [260, 0] }
+  ],
+  "connections": { "Webhook": { "main": [[{ "node": "Generar DALL-E", "type": "main", "index": 0 }]] }, "Generar DALL-E": { "main": [[{ "node": "Responder", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

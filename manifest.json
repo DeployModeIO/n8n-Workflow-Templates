@@ -1,0 +1,19 @@
+{
+  "name": "n8n Workflow Templates",
+  "short_name": "n8n Templates",
+  "description": "Biblioteca de plantillas de automatizacion para n8n: 51+ workflows en 9 categorias",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#05070e",
+  "theme_color": "#3b82f6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "manifest-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

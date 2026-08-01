@@ -1,0 +1,51 @@
+{
+  "name": "IA - Analisis de Sentimiento",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "sentimiento", "responseMode": "responseNode", "options": {} },
+      "id": "wh-sent-001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-220, 0],
+      "webhookId": "sentimiento"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"response_format\": {\"type\": \"json_object\"},\n  \"messages\": [\n    {\"role\": \"system\", \"content\": \"Analiza el sentimiento del texto. Devuelve JSON: {\\\"sentimiento\\\": \\\"positivo|negativo|neutral\\\", \\\"score\\\": 0-100, \\\"razon\\\": \\\"...\\\"}\"},\n    {\"role\": \"user\", \"content\": {{ JSON.stringify($json.body.texto) }}}\n  ]\n}",
+        "options": {}
+      },
+      "id": "http-sent-001",
+      "name": "Analizar IA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [20, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.choices[0].message.content }}",
+        "options": {}
+      },
+      "id": "resp-sent-001",
+      "name": "Responder",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [260, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Analizar IA", "type": "main", "index": 0 }]] },
+    "Analizar IA": { "main": [[{ "node": "Responder", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

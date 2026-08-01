@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Biblioteca de 51+ plantillas de automatizacion para n8n: IA, webhooks, email, industrial, SCADA, maestranza y mas. Listas para produccion con diagramas profesionales.">
+<meta name="keywords" content="n8n, workflow, automation, templates, open-source, industrial, scada, ai, oil gas, mineria">
+<meta name="author" content="n8n Workflow Templates">
+<meta name="theme-color" content="#05070e">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="n8n Workflow Templates — 51+ automatizaciones listas">
+<meta property="og:description" content="Biblioteca de plantillas para n8n con diagramas profesionales, wizard interactivo y toolbox de herramientas open-source.">
+<meta property="og:image" content="manifest-icon.svg">
+<meta property="og:locale" content="es_ES">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="n8n Workflow Templates — 51+ automatizaciones">
+<meta name="twitter:description" content="Plantillas de workflows para n8n listas para produccion. IA, industrial, SCADA y mas.">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="manifest-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="manifest-icon.svg">
+
+<title>n8n · Biblioteca de Automatizaciones</title>
+<style>
+:root{
+  --bg:#05070e;
+  --glass:rgba(15,22,40,.55); --glass-brd:rgba(96,140,220,.14);
+  --glass-hi:rgba(120,160,255,.10); --glass-in:rgba(120,160,255,.05);
+  --txt:#e9eef7; --txt-dim:#93a0bb; --txt-faint:#566180;
+  --accent:#3b82f6; --accent2:#60a5fa; --accent-glow:rgba(59,130,246,.45);
+  --shadow:rgba(0,6,20,.6); --chip:rgba(28,40,68,.45);
+  --spot1:rgba(59,130,246,.42); --spot1b:rgba(37,99,235,.10);
+  --spot2:rgba(96,165,250,.15); --spot3:rgba(37,99,235,.10);
+  --dot:rgba(120,160,255,.055);
+  --dotmask:radial-gradient(125% 95% at 72% -5%, #000 22%, transparent 82%);
+}
+[data-theme="light"]{
+  --bg:#eef2fb;
+  --glass:rgba(255,255,255,.6); --glass-brd:rgba(90,130,210,.3);
+  --glass-hi:rgba(255,255,255,.8); --glass-in:rgba(59,130,246,.05);
+  --txt:#0c1426; --txt-dim:#3c4d72; --txt-faint:#7a88a8;
+  --accent:#2563eb; --accent2:#1d4ed8; --accent-glow:rgba(37,99,235,.3);
+  --shadow:rgba(70,100,170,.2); --chip:rgba(255,255,255,.6);
+  --spot1:rgba(59,130,246,.2); --spot1b:rgba(59,130,246,.05);
+  --spot2:rgba(96,165,250,.12); --spot3:rgba(59,130,246,.07);
+  --dot:rgba(40,70,140,.07);
+  --dotmask:radial-gradient(125% 95% at 72% -5%, #000 30%, transparent 90%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  color:var(--txt); min-height:100vh; overflow-x:hidden;
+  background:var(--bg); transition:background .5s,color .3s;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:-2;
+  background:
+    radial-gradient(115% 72% at 80% -10%, var(--spot1), var(--spot1b) 36%, transparent 62%),
+    radial-gradient(58% 48% at 50% 4%, var(--spot2), transparent 56%),
+    radial-gradient(85% 62% at 14% 104%, var(--spot3), transparent 60%);
+  animation:drift 26s ease-in-out infinite alternate;
+}
+body::after{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:radial-gradient(var(--dot) 1px, transparent 1.6px);
+  background-size:26px 26px;
+  -webkit-mask:var(--dotmask); mask:var(--dotmask);
+}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-18px,14px,0) scale(1.04)}}
+
+.wrap{max-width:1280px;margin:0 auto;padding:32px 24px 80px}
+
+header{
+  background:var(--glass); backdrop-filter:blur(34px) saturate(150%); -webkit-backdrop-filter:blur(34px) saturate(150%);
+  border:1px solid var(--glass-brd); border-radius:24px;
+  padding:34px; margin-bottom:28px; box-shadow:0 10px 50px var(--shadow), inset 0 1px 0 var(--glass-in);
+  position:relative; overflow:hidden;
+}
+header::before{content:"";position:absolute;top:-60%;right:-10%;width:60%;height:200%;background:radial-gradient(circle, var(--accent-glow), transparent 60%);opacity:.25;pointer-events:none}
+header::after{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(150,185,255,.4),transparent)}
+.top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;position:relative}
+.brand h1{font-size:34px;font-weight:600;letter-spacing:-.6px;line-height:1.1;background:linear-gradient(180deg,#ffffff,#b6c7e8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.brand p{color:var(--txt-dim);margin-top:8px;font-size:15px}
+.stats{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap;position:relative}
+.stat{background:var(--chip);border:1px solid var(--glass-brd);border-radius:14px;padding:12px 20px;backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--glass-in)}
+.stat b{font-size:24px;display:block;color:var(--accent2);font-weight:700}
+.stat span{font-size:11px;color:var(--txt-dim);text-transform:uppercase;letter-spacing:1.2px}
+
+.toggle{
+  background:var(--chip);border:1px solid var(--glass-brd);color:var(--txt);
+  border-radius:40px;padding:10px 18px;cursor:pointer;font-size:14px;font-weight:600;
+  display:flex;align-items:center;gap:8px;transition:.25s;backdrop-filter:blur(14px);
+}
+.toggle:hover{background:var(--glass-hi);transform:translateY(-2px);border-color:rgba(96,165,250,.4)}
+
+.controls{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
+.search-box{position:relative}
+.search-box input{
+  width:100%;padding:16px 20px 16px 50px;font-size:16px;color:var(--txt);
+  background:var(--glass);border:1px solid var(--glass-brd);border-radius:16px;
+  backdrop-filter:blur(24px);outline:none;transition:.25s;box-shadow:inset 0 1px 0 var(--glass-in);
+}
+.search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow), inset 0 1px 0 var(--glass-in)}
+.search-box input::placeholder{color:var(--txt-faint)}
+.search-box svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:var(--txt-dim)}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{
+  padding:9px 16px;border-radius:30px;cursor:pointer;font-size:13px;font-weight:600;
+  background:var(--glass);border:1px solid var(--glass-brd);color:var(--txt-dim);
+  backdrop-filter:blur(14px);transition:.2s;user-select:none;
+}
+.chip:hover{color:var(--txt);transform:translateY(-2px);border-color:rgba(96,165,250,.35)}
+.chip.active{background:linear-gradient(180deg,#3b82f6,#2563eb);color:#fff;border-color:transparent;box-shadow:0 6px 22px var(--accent-glow)}
+.chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px currentColor}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:22px}
+.card{
+  background:var(--glass);border:1px solid var(--glass-brd);border-radius:20px;
+  padding:24px;backdrop-filter:blur(26px) saturate(135%);-webkit-backdrop-filter:blur(26px) saturate(135%);
+  box-shadow:0 10px 40px var(--shadow), inset 0 1px 0 var(--glass-in);position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s,border-color .25s;display:flex;flex-direction:column;
+}
+.card::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--cat);box-shadow:0 0 14px var(--cat)}
+.card::after{content:"";position:absolute;top:-40%;right:-20%;width:70%;height:120%;background:radial-gradient(circle, var(--cat), transparent 65%);opacity:.06;transition:opacity .3s;pointer-events:none}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 56px var(--shadow), 0 0 0 1px rgba(96,165,250,.25), inset 0 1px 0 var(--glass-in);border-color:rgba(96,165,250,.4)}
+.card:hover::after{opacity:.14}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;position:relative}
+.badge{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:5px 11px;border-radius:20px;white-space:nowrap;backdrop-filter:blur(8px)}
+.card h3{font-size:18px;font-weight:700;line-height:1.3;flex:1}
+.card .desc{color:var(--txt-dim);font-size:14px;line-height:1.55;margin-bottom:16px}
+.section-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--txt-faint);font-weight:700;margin:12px 0 7px}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.node{font-size:12px;font-weight:600;padding:5px 10px;border-radius:8px;border:1px solid;background:rgba(10,16,30,.4)}
+.arrow{color:var(--txt-faint);font-size:13px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--chip);color:var(--txt-dim)}
+.creds{display:flex;flex-wrap:wrap;gap:6px}
+.cred{font-size:11px;padding:3px 9px;border-radius:6px;background:rgba(59,130,246,.14);color:#9dc2ff;border:1px solid rgba(59,130,246,.3);font-family:ui-monospace,monospace}
+[data-theme="light"] .cred{color:#1d4ed8}
+.uses{list-style:none;font-size:13px;color:var(--txt-dim);line-height:1.6}
+.uses li{padding-left:18px;position:relative}
+.uses li::before{content:"▹";position:absolute;left:0;color:var(--cat)}
+details.obs{margin-top:14px;border-top:1px solid var(--glass-brd);padding-top:12px}
+details.obs summary{cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--txt-faint);list-style:none;display:flex;align-items:center;gap:6px}
+details.obs summary::before{content:"⚠";color:#fbbf24}
+details.obs[open] summary{margin-bottom:8px}
+details.obs ul{list-style:none;font-size:12.5px;color:var(--txt-dim);line-height:1.55}
+details.obs li{padding-left:16px;position:relative;margin-bottom:4px}
+details.obs li::before{content:"·";position:absolute;left:4px;color:var(--accent2);font-weight:900}
+.card-actions{display:flex;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--glass-brd)}
+.btn{
+  flex:1;text-align:center;padding:11px;border-radius:12px;font-size:13px;font-weight:700;
+  text-decoration:none;transition:.2s;cursor:pointer;border:1px solid var(--glass-brd);
+}
+.btn.json{background:linear-gradient(180deg,#3b82f6,#2563eb);color:#fff;border-color:transparent;box-shadow:0 6px 20px var(--accent-glow)}
+.btn.json:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 10px 28px var(--accent-glow)}
+.btn.svg{background:var(--chip);color:var(--txt)}
+.btn.svg:hover{background:var(--glass-hi);border-color:rgba(96,165,250,.4)}
+
+.empty{text-align:center;padding:80px 20px;color:var(--txt-faint);grid-column:1/-1}
+.empty b{font-size:48px;display:block;margin-bottom:12px}
+footer{text-align:center;margin-top:50px;color:var(--txt-faint);font-size:13px;line-height:1.8}
+footer a{color:var(--accent2);text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer code{background:var(--chip);padding:2px 7px;border-radius:6px;color:var(--txt-dim)}
+.count-lbl{color:var(--txt-dim);font-size:13px;margin-bottom:16px}
+/* ============ WIZARD / AYUDA-MEMORIA ============ */
+.wiz-fab{
+  position:fixed; right:26px; bottom:26px; z-index:60;
+  width:62px; height:62px; border-radius:50%; cursor:pointer;
+  background:linear-gradient(160deg,#3b82f6,#1d4ed8); color:#fff;
+  border:1px solid rgba(147,197,253,.5); display:grid; place-items:center;
+  box-shadow:0 10px 30px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .25s, box-shadow .25s;
+}
+.wiz-fab:hover{transform:translateY(-3px) scale(1.05); box-shadow:0 16px 40px var(--accent-glow)}
+.wiz-fab svg{width:28px; height:28px}
+.wiz-fab::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  border:2px solid rgba(59,130,246,.5); animation:pulse 2.4s ease-out infinite;
+}
+@keyframes pulse{0%{transform:scale(.85);opacity:.8}100%{transform:scale(1.45);opacity:0}}
+.wiz-fab .tip{
+  position:absolute; right:74px; top:50%; transform:translateY(-50%) translateX(8px);
+  background:rgba(8,12,22,.92); color:var(--txt); padding:8px 12px; border-radius:10px;
+  font-size:12.5px; font-weight:600; white-space:nowrap; opacity:0; pointer-events:none;
+  border:1px solid var(--glass-brd); transition:.25s; backdrop-filter:blur(10px);
+}
+.wiz-fab:hover .tip{opacity:1; transform:translateY(-50%) translateX(0)}
+body.wiz-open .wiz-fab{transform:scale(.6); opacity:0; pointer-events:none}
+
+.wiz-overlay{
+  position:fixed; inset:0; z-index:70; background:rgba(2,5,12,.55);
+  backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .35s;
+}
+body.wiz-open .wiz-overlay{opacity:1; pointer-events:auto}
+
+.wiz-drawer{
+  position:fixed; top:0; right:0; z-index:80; height:100vh; width:408px; max-width:92vw;
+  background:linear-gradient(180deg, rgba(9,14,26,.94), rgba(6,10,20,.96));
+  border-left:1px solid rgba(96,165,250,.22);
+  box-shadow:-24px 0 70px rgba(0,6,20,.7), inset 1px 0 0 rgba(120,160,255,.12);
+  backdrop-filter:blur(40px) saturate(150%); -webkit-backdrop-filter:blur(40px) saturate(150%);
+  transform:translateX(104%); transition:transform .42s cubic-bezier(.22,1,.36,1);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+body.wiz-open .wiz-drawer{transform:translateX(0)}
+.wiz-drawer::before{content:""; position:absolute; top:-30%; left:-40%; width:80%; height:60%; background:radial-gradient(circle, rgba(59,130,246,.22), transparent 65%); pointer-events:none}
+
+.wiz-head{padding:24px 24px 18px; border-bottom:1px solid var(--glass-brd); position:relative}
+.wiz-head .row{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.wiz-head h2{font-size:19px; font-weight:700; letter-spacing:-.3px; display:flex; align-items:center; gap:10px}
+.wiz-head h2 .ic{width:30px; height:30px; border-radius:9px; display:grid; place-items:center; background:linear-gradient(160deg,#3b82f6,#1d4ed8); box-shadow:0 4px 14px var(--accent-glow)}
+.wiz-head h2 .ic svg{width:17px; height:17px}
+.wiz-head p{color:var(--txt-dim); font-size:12.5px; margin-top:6px; line-height:1.5}
+.wiz-close{width:34px; height:34px; border-radius:9px; border:1px solid var(--glass-brd); background:var(--chip); color:var(--txt-dim); cursor:pointer; display:grid; place-items:center; transition:.2s; flex:none}
+.wiz-close:hover{color:#fff; background:rgba(239,68,68,.2); border-color:rgba(239,68,68,.4)}
+.wiz-close svg{width:16px; height:16px}
+
+.wiz-prog{margin-top:16px}
+.wiz-prog .meta{display:flex; justify-content:space-between; font-size:11px; color:var(--txt-faint); margin-bottom:7px; letter-spacing:.5px}
+.wiz-prog .meta b{color:var(--accent2)}
+.wiz-bar{height:7px; border-radius:6px; background:rgba(255,255,255,.06); overflow:hidden; position:relative}
+.wiz-bar i{display:block; height:100%; width:0; border-radius:6px; background:linear-gradient(90deg,#22d3ee,#3b82f6); box-shadow:0 0 12px var(--accent-glow); transition:width .5s cubic-bezier(.22,1,.36,1)}
+.wiz-reset{margin-top:12px; font-size:11px; color:var(--txt-faint); background:none; border:none; cursor:pointer; padding:0; letter-spacing:.5px; transition:.2s}
+.wiz-reset:hover{color:var(--accent2)}
+
+.wiz-body{flex:1; overflow-y:auto; padding:18px 20px 30px; scrollbar-width:thin; scrollbar-color:rgba(96,165,250,.3) transparent}
+.wiz-body::-webkit-scrollbar{width:7px}
+.wiz-body::-webkit-scrollbar-thumb{background:rgba(96,165,250,.3); border-radius:4px}
+
+/* timeline stepper */
+.wiz-step{position:relative; padding:0 0 6px 0; opacity:0; transform:translateX(14px); transition:opacity .4s, transform .4s}
+body.wiz-open .wiz-step{opacity:1; transform:none}
+.wiz-step .line{position:absolute; left:17px; top:38px; bottom:-2px; width:2px; background:linear-gradient(180deg, rgba(96,165,250,.35), rgba(96,165,250,.08))}
+.wiz-step:last-child .line{display:none}
+.wiz-step.done .line{background:linear-gradient(180deg, rgba(34,211,238,.6), rgba(34,211,238,.15))}
+.wiz-step .head{display:flex; align-items:center; gap:13px; padding:11px 12px; border-radius:13px; cursor:pointer; border:1px solid transparent; transition:.22s; position:relative}
+.wiz-step .head:hover{background:rgba(120,160,255,.06); border-color:var(--glass-brd)}
+.wiz-step.active .head{background:rgba(59,130,246,.1); border-color:rgba(59,130,246,.35); box-shadow:0 6px 22px rgba(0,6,20,.4)}
+.wiz-step .chk{width:36px; height:36px; border-radius:50%; flex:none; display:grid; place-items:center; background:rgba(10,16,30,.6); border:2px solid rgba(96,165,250,.35); color:var(--txt-faint); font-weight:700; font-size:14px; transition:.25s; position:relative; z-index:1}
+.wiz-step.active .chk{border-color:var(--accent); color:var(--accent2); box-shadow:0 0 0 4px rgba(59,130,246,.14)}
+.wiz-step.done .chk{background:linear-gradient(160deg,#22d3ee,#0891b2); border-color:transparent; color:#04121a}
+.wiz-step.done .chk svg{width:18px; height:18px}
+.wiz-step .ico{width:34px; height:34px; border-radius:10px; flex:none; display:grid; place-items:center; background:var(--chip); border:1px solid var(--glass-brd); transition:.25s}
+.wiz-step .ico svg{width:18px; height:18px; stroke:var(--accent2)}
+.wiz-step .head:hover .ico{transform:scale(1.08) rotate(-4deg); border-color:rgba(96,165,250,.4)}
+.wiz-step .txt{flex:1; min-width:0}
+.wiz-step .txt b{display:block; font-size:14px; font-weight:600; color:var(--txt)}
+.wiz-step.done .txt b{color:var(--txt-dim)}
+.wiz-step .txt span{display:block; font-size:11.5px; color:var(--txt-faint); margin-top:2px; line-height:1.4}
+.wiz-step .chev{width:16px; height:16px; stroke:var(--txt-faint); transition:transform .3s; flex:none}
+.wiz-step.open .chev{transform:rotate(90deg); stroke:var(--accent2)}
+
+.wiz-detail{display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.22,1,.36,1)}
+.wiz-step.open .wiz-detail{grid-template-rows:1fr}
+.wiz-detail > div{overflow:hidden}
+.wiz-detail .inner{padding:4px 12px 14px 61px}
+.wiz-art{background:rgba(8,13,26,.7); border:1px solid var(--glass-brd); border-radius:12px; padding:12px; margin-bottom:12px; display:grid; place-items:center}
+.wiz-art svg{width:100%; max-width:240px; height:auto}
+.wiz-tips{list-style:none; display:flex; flex-direction:column; gap:7px}
+.wiz-tips li{font-size:12px; color:var(--txt-dim); line-height:1.5; padding-left:20px; position:relative}
+.wiz-tips li::before{content:""; position:absolute; left:2px; top:6px; width:7px; height:7px; border-radius:2px; background:var(--accent); box-shadow:0 0 8px var(--accent-glow)}
+.wiz-tips li kbd{background:rgba(120,160,255,.12); border:1px solid var(--glass-brd); border-radius:5px; padding:1px 6px; font-family:ui-monospace,monospace; font-size:11px; color:var(--accent2)}
+.wiz-mark{margin-top:12px; display:inline-flex; align-items:center; gap:7px; font-size:11.5px; font-weight:600; color:var(--accent2); background:rgba(34,211,238,.1); border:1px solid rgba(34,211,238,.3); border-radius:8px; padding:7px 12px; cursor:pointer; transition:.2s}
+.wiz-mark:hover{background:rgba(34,211,238,.18)}
+.wiz-step.done .wiz-mark{color:var(--txt-faint); background:var(--chip); border-color:var(--glass-brd)}
+
+.wiz-done-banner{display:none; margin:6px 12px 16px; padding:14px; border-radius:13px; background:linear-gradient(160deg, rgba(34,211,238,.14), rgba(59,130,246,.1)); border:1px solid rgba(34,211,238,.3); text-align:center}
+.wiz-done-banner.show{display:block; animation:pop .4s}
+@keyframes pop{from{transform:scale(.92); opacity:0}to{transform:scale(1); opacity:1}}
+.wiz-done-banner b{display:block; font-size:14px; color:#7de8ff}
+.wiz-done-banner span{font-size:12px; color:var(--txt-dim)}
+
+/* ============ TOOLBOX — panel inferior ============ */
+.tb-fab{
+  position:fixed; left:50%; bottom:0; z-index:55; transform:translateX(-50%);
+  background:linear-gradient(180deg,rgba(12,20,38,.92),rgba(8,14,28,.96));
+  border:1px solid rgba(96,165,250,.2); border-bottom:none;
+  border-radius:16px 16px 0 0; padding:10px 28px 8px; cursor:pointer;
+  display:flex; align-items:center; gap:10px; color:var(--txt-dim);
+  font-size:13px; font-weight:600; letter-spacing:.3px;
+  backdrop-filter:blur(20px); box-shadow:0 -4px 24px rgba(0,6,20,.5);
+  transition:transform .3s, color .2s, box-shadow .3s;
+}
+.tb-fab:hover{color:var(--accent2); box-shadow:0 -6px 32px rgba(59,130,246,.2)}
+.tb-fab svg{width:18px; height:18px; stroke:currentColor; transition:transform .35s}
+body.tb-open .tb-fab svg{transform:rotate(180deg)}
+.tb-fab .tb-count{
+  background:linear-gradient(135deg,#3b82f6,#6366f1); color:#fff; font-size:11px;
+  padding:2px 8px; border-radius:10px; font-weight:700;
+}
+body.tb-open .tb-fab{transform:translateX(-50%) translateY(-100%); border-radius:16px 16px 0 0}
+
+.tb-panel{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  max-height:52vh; transform:translateY(100%); transition:transform .45s cubic-bezier(.22,1,.36,1);
+  background:linear-gradient(180deg, rgba(8,13,26,.97), rgba(5,8,16,.98));
+  border-top:1px solid rgba(96,165,250,.18);
+  box-shadow:0 -12px 60px rgba(0,6,20,.7); backdrop-filter:blur(40px) saturate(140%);
+  display:flex; flex-direction:column;
+}
+body.tb-open .tb-panel{transform:translateY(0)}
+.tb-panel::before{content:""; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(96,165,250,.35),transparent)}
+
+.tb-head{padding:18px 24px 12px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--glass-brd); flex:none}
+.tb-head h3{font-size:16px; font-weight:700; color:var(--txt); display:flex; align-items:center; gap:8px; white-space:nowrap}
+.tb-head h3 svg{width:20px; height:20px; stroke:var(--accent2)}
+.tb-search{
+  flex:1; min-width:180px; max-width:340px; padding:9px 14px 9px 36px; font-size:13px;
+  background:rgba(10,16,30,.7); border:1px solid var(--glass-brd); border-radius:10px;
+  color:var(--txt); outline:none; transition:.2s;
+}
+.tb-search:focus{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-glow)}
+.tb-search::placeholder{color:var(--txt-faint)}
+.tb-search-wrap{position:relative; flex:1; min-width:180px; max-width:340px}
+.tb-search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); width:15px; height:15px; stroke:var(--txt-faint)}
+.tb-cats{display:flex; gap:7px; flex-wrap:wrap; flex:1; justify-content:flex-end}
+.tb-cat{
+  padding:5px 12px; border-radius:20px; font-size:11.5px; font-weight:600; cursor:pointer;
+  background:rgba(20,30,50,.6); border:1px solid var(--glass-brd); color:var(--txt-dim);
+  transition:.2s; white-space:nowrap;
+}
+.tb-cat:hover{color:var(--txt); border-color:rgba(96,165,250,.3)}
+.tb-cat.active{background:rgba(59,130,246,.18); color:var(--accent2); border-color:rgba(59,130,246,.4)}
+
+.tb-body{flex:1; overflow-y:auto; padding:16px 24px 24px; scrollbar-width:thin; scrollbar-color:rgba(96,165,250,.25) transparent}
+.tb-body::-webkit-scrollbar{width:6px}
+.tb-body::-webkit-scrollbar-thumb{background:rgba(96,165,250,.25); border-radius:3px}
+
+.tb-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:14px}
+.tb-card{
+  background:rgba(12,20,38,.6); border:1px solid var(--glass-brd); border-radius:14px;
+  padding:16px; cursor:grab; position:relative; overflow:hidden;
+  transition:transform .22s, box-shadow .22s, border-color .22s;
+  display:flex; flex-direction:column; gap:8px;
+}
+.tb-card:active{cursor:grabbing}
+.tb-card:hover{transform:translateY(-3px); box-shadow:0 8px 28px rgba(0,6,20,.5); border-color:rgba(96,165,250,.3)}
+.tb-card::after{content:""; position:absolute; top:-30%; right:-20%; width:60%; height:80%; background:radial-gradient(circle, var(--tc,rgba(59,130,246,.15)), transparent 65%); opacity:0; transition:opacity .3s; pointer-events:none}
+.tb-card:hover::after{opacity:1}
+.tb-card .tb-icon{
+  width:42px; height:42px; border-radius:11px; display:grid; place-items:center;
+  background:var(--tc-bg, rgba(59,130,246,.12)); border:1px solid var(--tc-bd, rgba(59,130,246,.25));
+  flex:none;
+}
+.tb-card .tb-icon svg{width:22px; height:22px}
+.tb-card .tb-name{font-size:14px; font-weight:700; color:var(--txt)}
+.tb-card .tb-desc{font-size:11.5px; color:var(--txt-dim); line-height:1.45; flex:1}
+.tb-card .tb-foot{display:flex; align-items:center; gap:8px; margin-top:4px}
+.tb-card .tb-badge{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:3px 8px; border-radius:6px; background:var(--tc-bg, rgba(59,130,246,.1)); color:var(--tc, var(--accent2)); border:1px solid var(--tc-bd, rgba(59,130,246,.2))}
+.tb-card .tb-link{font-size:10.5px; color:var(--txt-faint); text-decoration:none; margin-left:auto; transition:.2s}
+.tb-card .tb-link:hover{color:var(--accent2)}
+.tb-card .tb-copy{
+  position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:8px;
+  background:rgba(10,16,30,.8); border:1px solid var(--glass-brd); display:grid; place-items:center;
+  opacity:0; transition:.2s; cursor:pointer;
+}
+.tb-card:hover .tb-copy{opacity:1}
+.tb-card .tb-copy:hover{background:rgba(59,130,246,.2); border-color:rgba(59,130,246,.4)}
+.tb-card .tb-copy svg{width:14px; height:14px; stroke:var(--txt-dim)}
+.tb-card .tb-copy.copied svg{stroke:#22d3ee}
+.tb-card .tb-copy.copied{background:rgba(34,211,238,.15); border-color:rgba(34,211,238,.4)}
+
+.tb-toast{
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:rgba(8,14,28,.95); border:1px solid rgba(34,211,238,.4); border-radius:12px;
+  padding:12px 20px; color:#7de8ff; font-size:13px; font-weight:600;
+  box-shadow:0 8px 30px rgba(0,6,20,.6); backdrop-filter:blur(16px);
+  opacity:0; pointer-events:none; transition:opacity .3s, transform .3s; z-index:90;
+  display:flex; align-items:center; gap:8px;
+}
+.tb-toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+.tb-toast svg{width:16px; height:16px; stroke:#22d3ee; flex:none}
+
+.tb-empty{text-align:center; padding:40px; color:var(--txt-faint); grid-column:1/-1}
+
+/* status dot */
+.tb-status{width:9px; height:9px; border-radius:50%; flex:none; position:relative; transition:background .4s}
+.tb-status.checking{background:#f59e0b; animation:tbPulse 1s infinite}
+.tb-status.online{background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.6)}
+.tb-status.offline{background:#475569}
+@keyframes tbPulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* action buttons on card */
+.tb-actions{display:flex; gap:6px; margin-top:6px}
+.tb-btn{
+  flex:1; padding:7px 0; border-radius:9px; font-size:11px; font-weight:700;
+  text-align:center; cursor:pointer; border:1px solid var(--glass-brd);
+  background:var(--chip); color:var(--txt-dim); transition:.2s; text-decoration:none;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+}
+.tb-btn svg{width:13px; height:13px; stroke:currentColor; flex:none}
+.tb-btn:hover{color:var(--txt); border-color:rgba(96,165,250,.35); transform:translateY(-1px)}
+.tb-btn.connect{background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.3); color:#4ade80}
+.tb-btn.connect:hover{background:rgba(34,197,94,.22); box-shadow:0 4px 14px rgba(34,197,94,.15)}
+.tb-btn.install{background:rgba(59,130,246,.1); border-color:rgba(59,130,246,.25); color:var(--accent2)}
+.tb-btn.install:hover{background:rgba(59,130,246,.2); box-shadow:0 4px 14px var(--accent-glow)}
+
+/* install modal */
+.tb-modal-overlay{
+  position:fixed; inset:0; z-index:95; background:rgba(2,5,12,.7);
+  backdrop-filter:blur(6px); display:none; place-items:center;
+}
+.tb-modal-overlay.show{display:grid}
+.tb-modal{
+  background:linear-gradient(180deg, rgba(10,16,30,.98), rgba(6,10,20,.99));
+  border:1px solid rgba(96,165,250,.22); border-radius:20px;
+  width:520px; max-width:92vw; max-height:80vh; overflow-y:auto;
+  box-shadow:0 20px 80px rgba(0,6,20,.8); padding:28px;
+  animation:tbModalIn .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes tbModalIn{from{transform:scale(.9) translateY(20px); opacity:0}to{transform:none; opacity:1}}
+.tb-modal h3{font-size:20px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px}
+.tb-modal h3 .tb-m-icon{width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:var(--tc-bg); border:1px solid var(--tc-bd)}
+.tb-modal h3 .tb-m-icon svg{width:20px; height:20px}
+.tb-modal .tb-m-desc{color:var(--txt-dim); font-size:13px; margin:8px 0 18px; line-height:1.5}
+.tb-modal .tb-m-section{margin-bottom:16px}
+.tb-modal .tb-m-section h4{font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--txt-faint); font-weight:700; margin-bottom:8px}
+.tb-modal .tb-m-cmd{
+  background:rgba(8,13,26,.8); border:1px solid var(--glass-brd); border-radius:10px;
+  padding:12px 14px; font-family:ui-monospace,'Cascadia Code',monospace; font-size:12.5px;
+  color:#7de8ff; line-height:1.6; position:relative; cursor:pointer; transition:.2s;
+  white-space:pre-wrap; word-break:break-all;
+}
+.tb-modal .tb-m-cmd:hover{border-color:rgba(96,165,250,.35); background:rgba(12,20,38,.9)}
+.tb-modal .tb-m-cmd .tb-m-copy-hint{
+  position:absolute; top:8px; right:8px; font-size:10px; color:var(--txt-faint);
+  background:rgba(10,16,30,.8); padding:3px 8px; border-radius:6px;
+  opacity:0; transition:.2s; font-family:'Segoe UI',sans-serif;
+}
+.tb-modal .tb-m-cmd:hover .tb-m-copy-hint{opacity:1}
+.tb-modal .tb-m-cmd.copied{border-color:rgba(34,211,238,.5)}
+.tb-modal .tb-m-cmd.copied .tb-m-copy-hint{opacity:1; color:#22d3ee}
+.tb-modal .tb-m-note{font-size:12px; color:var(--txt-dim); line-height:1.5; padding:10px 14px; background:rgba(59,130,246,.06); border:1px solid rgba(59,130,246,.15); border-radius:10px}
+.tb-modal .tb-m-close{
+  position:absolute; top:16px; right:16px; width:32px; height:32px; border-radius:8px;
+  border:1px solid var(--glass-brd); background:var(--chip); color:var(--txt-dim);
+  cursor:pointer; display:grid; place-items:center; transition:.2s;
+}
+.tb-modal .tb-m-close:hover{color:#fff; background:rgba(239,68,68,.2); border-color:rgba(239,68,68,.4)}
+.tb-modal .tb-m-close svg{width:14px; height:14px}
+.tb-modal .tb-m-actions{display:flex; gap:10px; margin-top:20px}
+.tb-modal .tb-m-btn{
+  flex:1; padding:12px; border-radius:12px; font-size:13px; font-weight:700;
+  text-align:center; cursor:pointer; border:none; transition:.2s;
+}
+.tb-modal .tb-m-btn.primary{background:linear-gradient(180deg,#3b82f6,#2563eb); color:#fff; box-shadow:0 6px 20px var(--accent-glow)}
+.tb-modal .tb-m-btn.primary:hover{filter:brightness(1.1); transform:translateY(-2px)}
+.tb-modal .tb-m-btn.secondary{background:var(--chip); color:var(--txt); border:1px solid var(--glass-brd)}
+.tb-modal .tb-m-btn.secondary:hover{background:var(--glass-hi)}
+
+/* scan bar */
+.tb-scan{
+  display:flex; align-items:center; gap:8px; padding:8px 14px; margin-bottom:12px;
+  background:rgba(10,16,30,.5); border:1px solid var(--glass-brd); border-radius:10px;
+  font-size:12px; color:var(--txt-dim);
+}
+.tb-scan .tb-scan-dot{width:8px; height:8px; border-radius:50%; background:#f59e0b; animation:tbPulse 1s infinite}
+.tb-scan.done .tb-scan-dot{background:#22c55e; animation:none}
+.tb-scan .tb-scan-count{margin-left:auto; color:var(--accent2); font-weight:700}
+
+@media(max-width:600px){
+  .brand h1{font-size:25px}.grid{grid-template-columns:1fr}
+  .wiz-step .inner{padding-left:12px}.wiz-fab{right:16px; bottom:16px}
+  .tb-grid{grid-template-columns:repeat(auto-fill, minmax(160px, 1fr))}
+  .tb-head{padding:14px 16px 10px}.tb-body{padding:12px 16px 20px}
+  .tb-cats{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<a href="#grid" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" onfocus="this.style.cssText='position:fixed;left:20px;top:20px;width:auto;height:auto;padding:12px 20px;background:#3b82f6;color:#fff;border-radius:10px;z-index:999;font-weight:600'" onblur="this.style.cssText='position:absolute;left:-9999px'">Saltar al contenido</a>
+<div class="wrap">
+  <header>
+    <div class="top-row">
+      <div class="brand">
+        <h1>Biblioteca de Automatizaciones n8n</h1>
+        <p>Plantillas de workflows listas para producción · arrastra el .json al canvas o copia/pega</p>
+      </div>
+      <button class="toggle" id="themeBtn" onclick="toggleTheme()"><span id="themeIcon">☀️</span><span id="themeTxt">Claro</span></button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stTotal">0</b><span>Plantillas</span></div>
+      <div class="stat"><b id="stCats">0</b><span>Categorías</span></div>
+      <div class="stat"><b id="stShown">0</b><span>Mostradas</span></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="search" placeholder="Buscar por nombre, descripción, nodo o etiqueta..." oninput="render()">
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="count-lbl" id="countLbl"></div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    Fuentes: <a href="https://n8n.io/workflows/" target="_blank">n8n.io (11,041 plantillas)</a> ·
+    <a href="https://github.com/enescingoz/awesome-n8n-templates" target="_blank">awesome-n8n-templates</a> ·
+    <a href="https://github.com/felipfr/awesome-n8n-workflows" target="_blank">felipfr/awesome-n8n-workflows</a> ·
+    <a href="https://www.activepieces.com/pieces" target="_blank">Activepieces (756 integraciones)</a><br>
+    Genera diagramas con <code>Generate-Diagram.ps1</code> · amplía el catálogo editando <code>data.js</code> · n8n en <a href="http://localhost:5678" target="_blank">localhost:5678</a>
+  </footer>
+</div>
+
+<!-- ============ WIZARD / AYUDA-MEMORIA ============ -->
+<div class="wiz-overlay" id="wizOverlay" onclick="toggleWiz(false)"></div>
+<aside class="wiz-drawer" id="wizDrawer" aria-label="Asistente de n8n">
+  <div class="wiz-head">
+    <div class="row">
+      <h2><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 7 V17 L12 22 L4 17 V7 Z"/><path d="M12 22 V12 M12 12 L20 7 M12 12 L4 7"/></svg></span>Asistente n8n</h2>
+      <button class="wiz-close" onclick="toggleWiz(false)" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
+    </div>
+    <p>Tu guía paso a paso. Marca cada paso al completarlo — se guarda como memoria.</p>
+    <div class="wiz-prog">
+      <div class="meta"><span>PROGRESO</span><span><b id="wizDoneN">0</b> / <span id="wizTotN">0</span> pasos</span></div>
+      <div class="wiz-bar"><i id="wizBar"></i></div>
+      <button class="wiz-reset" onclick="resetWiz()">↺ Reiniciar guía</button>
+    </div>
+  </div>
+  <div class="wiz-body">
+    <div class="wiz-done-banner" id="wizBanner"><b>¡Listo para automatizar!</b><span>Ya dominas lo esencial de n8n.</span></div>
+    <div id="wizSteps"></div>
+  </div>
+</aside>
+<button class="wiz-fab" id="wizFab" onclick="toggleWiz(true)" aria-label="Abrir asistente de n8n">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 1 1 4.5 2.6c-.9.5-1.6 1.2-1.6 2.3"/><circle cx="12" cy="17" r=".6" fill="#fff" stroke="none"/></svg>
+  <span class="tip">¿Cómo uso n8n? · Ayuda</span>
+</button>
+
+<!-- ============ TOOLBOX — herramientas open-source ============ -->
+<div class="tb-toast" id="tbToast"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13 L10 18 L20 6"/></svg><span id="tbToastTxt">Nodo copiado — pégalo en n8n con Ctrl+V</span></div>
+
+<!-- Install Modal -->
+<div class="tb-modal-overlay" id="tbModalOverlay" onclick="if(event.target===this)closeTbModal()">
+  <div class="tb-modal" id="tbModal" style="position:relative">
+    <button class="tb-m-close" onclick="closeTbModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
+    <div id="tbModalContent"></div>
+  </div>
+</div>
+<div class="tb-fab" id="tbFab" onclick="toggleTb()">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 L12 9 L18 15"/></svg>
+  <span>Herramientas Open-Source</span>
+  <span class="tb-count" id="tbCount">0</span>
+</div>
+<div class="tb-panel" id="tbPanel">
+  <div class="tb-head">
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Caja de Herramientas</h3>
+    <div class="tb-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" class="tb-search" id="tbSearch" placeholder="Buscar herramienta..." oninput="renderTb()">
+    </div>
+    <div class="tb-cats" id="tbCats"></div>
+  </div>
+  <div class="tb-body"><div class="tb-grid" id="tbGrid"></div></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+let activeCat = "all";
+const grid=document.getElementById('grid'), chipsEl=document.getElementById('chips');
+
+function buildChips(){
+  const usedCats=[...new Set(TEMPLATES.map(t=>t.cat))];
+  let html=`<div class="chip active" data-cat="all" onclick="setCat('all',this)">Todas</div>`;
+  Object.entries(CATS).forEach(([id,c])=>{
+    if(!usedCats.includes(id))return;
+    html+=`<div class="chip" data-cat="${id}" onclick="setCat('${id}',this)"><span class="dot" style="background:${c.color};color:${c.color}"></span>${c.name}</div>`;
+  });
+  chipsEl.innerHTML=html;
+}
+function setCat(cat,el){activeCat=cat;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render();}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  const list=TEMPLATES.filter(t=>{
+    if(activeCat!=="all"&&t.cat!==activeCat)return false;
+    if(!q)return true;
+    const hay=(t.name+" "+t.desc+" "+t.tags.join(" ")+" "+t.creds.join(" ")+" "+t.flow.map(f=>f[0]).join(" ")).toLowerCase();
+    return hay.includes(q);
+  });
+  document.getElementById('stShown').textContent=list.length;
+  document.getElementById('countLbl').textContent=`Mostrando ${list.length} de ${TEMPLATES.length} plantillas`;
+  if(!list.length){grid.innerHTML=`<div class="empty"><b>🔍</b>Sin resultados para tu búsqueda</div>`;return;}
+  grid.innerHTML=list.map(t=>{
+    const c=CATS[t.cat];
+    const flow=t.flow.map((f,i)=>{
+      const col=NODE_COLORS[f[1]]||"#888";
+      return `<span class="node" style="border-color:${col}55;color:${col}">${f[0]}</span>`+(i<t.flow.length-1?'<span class="arrow">→</span>':'');
+    }).join('');
+    const creds=t.creds.length?t.creds.map(x=>`<span class="cred">🔑 ${x}</span>`).join(''):'<span class="tag">sin credenciales</span>';
+    const uses=t.uses.map(u=>`<li>${u}</li>`).join('');
+    const obs=t.obs.map(o=>`<li>${o}</li>`).join('');
+    const tags=t.tags.map(x=>`<span class="tag">#${x}</span>`).join('');
+    return `<div class="card" style="--cat:${c.color}">
+      <div class="card-head"><h3>${t.name}</h3><span class="badge" style="color:${c.color};background:${c.color}1f;border:1px solid ${c.color}4d">${c.name}</span></div>
+      <div class="desc">${t.desc}</div>
+      <div class="section-lbl">Flujo</div><div class="flow">${flow}</div>
+      <div class="section-lbl">Credenciales</div><div class="creds">${creds}</div>
+      <div class="section-lbl">Casos de uso</div><ul class="uses">${uses}</ul>
+      <div class="section-lbl">Etiquetas</div><div class="tags">${tags}</div>
+      <details class="obs"><summary>Observaciones y notas</summary><ul>${obs}</ul></details>
+      <div class="card-actions">
+        <a class="btn json" href="${t.cat}/${t.file}.json" target="_blank">⬇ Abrir JSON</a>
+        <a class="btn svg" href="${t.cat}/${t.file}.svg" target="_blank">📊 Diagrama</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  localStorage.setItem('n8n-lib-theme',next);
+  updateThemeBtn(next);
+}
+function updateThemeBtn(t){
+  document.getElementById('themeIcon').textContent=t==='dark'?'☀️':'🌙';
+  document.getElementById('themeTxt').textContent=t==='dark'?'Claro':'Oscuro';
+}
+(function init(){
+  const saved=localStorage.getItem('n8n-lib-theme')||'dark';
+  document.documentElement.setAttribute('data-theme',saved);
+  updateThemeBtn(saved);
+  document.getElementById('stTotal').textContent=TEMPLATES.length;
+  document.getElementById('stCats').textContent=new Set(TEMPLATES.map(t=>t.cat)).size;
+  buildChips();render();
+})();
+</script>
+
+<script>
+/* ============ WIZARD n8n — logica ============ */
+const WIZ_KEY = "n8n-wiz-done-v1";
+const N = (x,y,t,lab,col)=>`<g><rect x="${x}" y="${y}" width="58" height="30" rx="7" fill="rgba(10,16,30,.85)" stroke="${col}" stroke-width="1.6"/><text x="${x+29}" y="${y+19}" fill="#dbe6fb" font-size="8.5" font-weight="600" text-anchor="middle" font-family="Segoe UI,sans-serif">${lab}</text></g>`;
+const AR = (x1,x2,y)=>`<line x1="${x1}" y1="${y}" x2="${x2-3}" y2="${y}" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#warr)"/>`;
+const ARTHEAD = `<defs><marker id="warr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3b82f6"/></marker></defs>`;
+
+const STEPS = [
+ { id:"abrir", t:"Abrir n8n", h:"Entra al editor en tu PC",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9 H21"/><circle cx="6.5" cy="6.5" r=".6" fill="currentColor"/><circle cx="9" cy="6.5" r=".6" fill="currentColor"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}<rect x="6" y="6" width="228" height="80" rx="10" fill="rgba(11,26,48,.6)" stroke="#1e3a5f"/><circle cx="20" cy="20" r="3" fill="#ef4444"/><circle cx="32" cy="20" r="3" fill="#f59e0b"/><circle cx="44" cy="20" r="3" fill="#22c55e"/><rect x="64" y="14" width="150" height="12" rx="6" fill="rgba(8,13,26,.8)" stroke="#1e3a5f"/><text x="74" y="23" fill="#60a5fa" font-size="8" font-family="monospace">localhost:5678</text>${N(86,46,"","n8n canvas","#3b82f6")}<text x="115" y="78" fill="#566180" font-size="8" text-anchor="middle" font-family="Segoe UI">editor de workflows</text></svg>`,
+   tips:["Doble clic en el icono <b>n8n</b> del escritorio o ve a <kbd>localhost:5678</kbd>","La 1ª vez crea tu cuenta de administrador (se guarda local)"] },
+ { id:"nuevo", t:"Nuevo workflow", h:"Un lienzo en blanco",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 V19 M5 12 H19"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}<rect x="70" y="30" width="100" height="32" rx="9" fill="rgba(59,130,246,.14)" stroke="#3b82f6" stroke-width="1.6"/><path d="M96 46 H108 M102 40 V52" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/><text x="116" y="50" fill="#dbe6fb" font-size="9.5" font-weight="600" font-family="Segoe UI">Add workflow</text></svg>`,
+   tips:["Botón <b>+ Add workflow</b> arriba a la izquierda","Nómbralo con el objetivo, ej: <i>Alertas SCADA</i>"] },
+ { id:"trigger", t:"Añadir Trigger", h:"El disparador que inicia todo",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 L5 13 H11 L10 21 L19 10 H13 Z"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}${N(20,31,"","Trigger","#f59e0b")}${AR(78,108,46)}<rect x="108" y="31" width="58" height="30" rx="7" fill="rgba(10,16,30,.5)" stroke="#1e3a5f" stroke-dasharray="4 3"/><text x="137" y="50" fill="#566180" font-size="14" text-anchor="middle">+</text><text x="49" y="78" fill="#fbbf24" font-size="8" text-anchor="middle" font-family="Segoe UI">Schedule / Webhook</text></svg>`,
+   tips:["Clic en el <b>+</b> del lienzo → busca el trigger","<b>Schedule</b> = por tiempo · <b>Webhook</b> = por evento externo"] },
+ { id:"nodo", t:"Añadir acción", h:"Conecta una app o proceso",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2 V5 M12 19 V22 M2 12 H5 M19 12 H22 M5 5 L7 7 M17 17 L19 19 M19 5 L17 7 M7 17 L5 19"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}${N(14,31,"","Trigger","#f59e0b")}${AR(72,98,46)}${N(98,31,"","Gmail","#10b981")}${AR(156,182,46)}${N(182,31,"","Sheets","#3b82f6")}</svg>`,
+   tips:["Clic en el <b>+</b> tras el trigger → busca la integración","Hay +400 nodos: Gmail, Sheets, Telegram, HTTP, IA…"] },
+ { id:"datos", t:"Pasar datos", h:"Usa los datos del nodo anterior",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 H19 M13 6 L19 12 L13 18"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}${N(20,18,"","Gmail","#10b981")}<rect x="92" y="50" width="120" height="22" rx="6" fill="rgba(8,13,26,.85)" stroke="#22d3ee" stroke-width="1.3"/><text x="100" y="65" fill="#7de8ff" font-size="9" font-family="monospace">{{ $json.asunto }}</text><path d="M49 48 C70 48 70 61 92 61" fill="none" stroke="#22d3ee" stroke-width="1.4" stroke-dasharray="3 3"/></svg>`,
+   tips:["Cada nodo entrega <b>$json</b> al siguiente","Inserta campos con <kbd>{{ $json.campo }}</kbd> o el panel de expresión"] },
+ { id:"cred", t:"Credenciales", h:"Conecta tus cuentas una vez",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="4"/><path d="M12 12 H21 M18 12 V16 M15 12 V15"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}${N(70,16,"","Nodo","#3b82f6")}<path d="M99 46 V58" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="3 3"/><rect x="62" y="58" width="74" height="24" rx="7" fill="rgba(245,158,11,.12)" stroke="#f59e0b" stroke-width="1.4"/><text x="99" y="74" fill="#fbbf24" font-size="9" font-weight="600" text-anchor="middle" font-family="Segoe UI">🔑 Credential</text></svg>`,
+   tips:["En el nodo → <b>Credential</b> → <i>Create new</i>","Se guardan cifradas; no las pones cada vez"] },
+ { id:"importar", t:"Importar plantilla", h:"Usa esta biblioteca al instante",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 V15 M7 10 L12 15 L17 10"/><path d="M4 19 H20"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}<rect x="14" y="22" width="64" height="48" rx="8" fill="rgba(11,26,48,.7)" stroke="#3b82f6"/><text x="46" y="42" fill="#60a5fa" font-size="9" font-weight="700" text-anchor="middle" font-family="Segoe UI">.json</text><text x="46" y="58" fill="#566180" font-size="7.5" text-anchor="middle" font-family="Segoe UI">plantilla</text><path d="M82 46 H118" stroke="#22d3ee" stroke-width="2" marker-end="url(#warr)"/><rect x="122" y="26" width="104" height="40" rx="8" fill="rgba(10,16,30,.6)" stroke="#1e3a5f" stroke-dasharray="4 3"/><text x="174" y="44" fill="#7de8ff" font-size="8.5" font-weight="600" text-anchor="middle" font-family="Segoe UI">canvas n8n</text><text x="174" y="58" fill="#566180" font-size="7.5" text-anchor="middle" font-family="Segoe UI">arrastra aquí</text></svg>`,
+   tips:["Abre el <b>⬇ Abrir JSON</b> de cualquier tarjeta → arrástralo al canvas","O copia el JSON y pulsa <kbd>Ctrl</kbd>+<kbd>V</kbd> sobre el lienzo","Luego solo ajusta credenciales y IDs"] },
+ { id:"activar", t:"Probar y activar", h:"Ejecuta y déjalo corriendo",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4 L20 12 L6 20 Z"/></svg>`,
+   art:`<svg viewBox="0 0 240 92">${ARTHEAD}<rect x="20" y="32" width="84" height="28" rx="8" fill="rgba(16,185,129,.12)" stroke="#10b981" stroke-width="1.5"/><path d="M40 46 L46 52 L56 40" stroke="#34d399" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="74" y="50" fill="#9ae6c4" font-size="9" font-weight="600" font-family="Segoe UI">Test</text><rect x="134" y="34" width="44" height="24" rx="12" fill="#10b981"/><circle cx="166" cy="46" r="9" fill="#fff"/><text x="196" y="50" fill="#9ae6c4" font-size="9.5" font-weight="700" font-family="Segoe UI">Active</text></svg>`,
+   tips:["<b>Test workflow</b> para validar con datos reales","Activa el switch <b>Active</b> arriba a la derecha para producción","Si usa webhook, copia la URL <i>Production</i>"] },
+];
+
+const wizDone = new Set(JSON.parse(localStorage.getItem(WIZ_KEY) || "[]"));
+let wizOpenStep = null;
+
+function renderWiz(){
+  document.getElementById("wizTotN").textContent = STEPS.length;
+  const doneN = STEPS.filter(s=>wizDone.has(s.id)).length;
+  document.getElementById("wizDoneN").textContent = doneN;
+  document.getElementById("wizBar").style.width = (doneN/STEPS.length*100)+"%";
+  document.getElementById("wizBanner").classList.toggle("show", doneN===STEPS.length);
+  const firstPending = STEPS.find(s=>!wizDone.has(s.id));
+  if(wizOpenStep===null && firstPending) wizOpenStep = firstPending.id;
+  const box = document.getElementById("wizSteps");
+  box.innerHTML = STEPS.map((s,i)=>{
+    const done = wizDone.has(s.id);
+    const active = firstPending && firstPending.id===s.id && !done;
+    const open = wizOpenStep===s.id;
+    const cls = ["wiz-step"]; if(done)cls.push("done"); if(active)cls.push("active"); if(open)cls.push("open");
+    const tips = s.tips.map(t=>`<li>${t}</li>`).join("");
+    const num = done ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13 L10 18 L20 6"/></svg>` : (i+1);
+    return `<div class="${cls.join(' ')}" style="transition-delay:${i*55}ms">
+      <div class="line"></div>
+      <div class="head" onclick="toggleStep('${s.id}')">
+        <div class="chk">${num}</div>
+        <div class="ico">${s.icon}</div>
+        <div class="txt"><b>${s.t}</b><span>${s.h}</span></div>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L15 12 L9 18"/></svg>
+      </div>
+      <div class="wiz-detail"><div><div class="inner">
+        <div class="wiz-art">${s.art}</div>
+        <ul class="wiz-tips">${tips}</ul>
+        <button class="wiz-mark" onclick="event.stopPropagation();markStep('${s.id}')">${done?'↩ Marcar como pendiente':'✓ Lo hice'}</button>
+      </div></div></div>
+    </div>`;
+  }).join("");
+}
+function toggleStep(id){ wizOpenStep = (wizOpenStep===id)?null:id; renderWiz(); }
+function markStep(id){ if(wizDone.has(id))wizDone.delete(id); else wizDone.add(id); localStorage.setItem(WIZ_KEY, JSON.stringify([...wizDone])); renderWiz(); }
+function resetWiz(){ wizDone.clear(); localStorage.removeItem(WIZ_KEY); wizOpenStep=null; renderWiz(); }
+function toggleWiz(open){
+  document.body.classList.toggle("wiz-open", open);
+  if(open){ renderWiz(); requestAnimationFrame(()=>{ const a=document.querySelector(".wiz-step.active"); if(a)a.scrollIntoView({behavior:"smooth",block:"center"}); }); }
+}
+document.addEventListener("keydown", e=>{ if(e.key==="Escape")toggleWiz(false); });
+renderWiz();
+</script>
+
+<script>
+/* ============ TOOLBOX — herramientas open-source para n8n ============ */
+const TB_CATS = {
+  ia:    {name:"IA / ML Local",    color:"#a78bfa"},
+  db:    {name:"Bases de Datos",   color:"#60a5fa"},
+  mon:   {name:"Monitoreo",        color:"#f59e0b"},
+  comm:  {name:"Comunicación",     color:"#f472b6"},
+  store: {name:"Almacenamiento",   color:"#34d399"},
+  nocode:{name:"No-Code / CMS",    color:"#22d3ee"},
+  iot:   {name:"IoT / Industrial", color:"#fb923c"},
+  doc:   {name:"Documentos",       color:"#94a3b8"},
+  web:   {name:"Web / Scraping",   color:"#4ade80"},
+};
+
+const TOOLS = [
+  // --- IA / ML Local ---
+  {id:"ollama",name:"Ollama",cat:"ia",color:"#a78bfa",url:"https://ollama.com",
+   desc:"LLMs locales (Llama, Mistral, Gemma) sin API key. Compatible OpenAI.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.5" fill="#a78bfa"/><circle cx="15" cy="10" r="1.5" fill="#a78bfa"/><path d="M8 15 Q12 18 16 15"/></svg>`,
+   node:{"name":"Ollama Chat","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:11434/v1/chat/completions","sendBody":true,"specifyBody":"json","jsonBody":"{\"model\":\"llama3\",\"messages\":[{\"role\":\"user\",\"content\":\"Hola\"}]}","options":{}}}},
+  {id:"lmstudio",name:"LM Studio",cat:"ia",color:"#c084fc",url:"https://lmstudio.ai",
+   desc:"Interfaz gráfica para LLMs locales. API compatible OpenAI en :1234.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M8 21 H16"/><path d="M8 10 L11 13 L16 8"/></svg>`,
+   node:{"name":"LM Studio Chat","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:1234/v1/chat/completions","sendBody":true,"specifyBody":"json","jsonBody":"{\"model\":\"local-model\",\"messages\":[{\"role\":\"user\",\"content\":\"Hola\"}]}","options":{}}}},
+  {id:"whisper-cpp",name:"Whisper.cpp",cat:"ia",color:"#818cf8",url:"https://github.com/ggerganov/whisper.cpp",
+   desc:"Transcripción de audio local, rápida y sin API. Servidor HTTP disponible.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 V6 M12 18 V22 M4 12 H8 M16 12 H20"/><circle cx="12" cy="12" r="4"/><path d="M9 9 L15 15 M15 9 L9 15" opacity=".3"/></svg>`,
+   node:{"name":"Whisper.cpp Transcribe","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8080/inference","contentType":"multipart-form-data","sendBody":true,"bodyParameters":{"parameters":[{"name":"file","parameterType":"n8nBinaryFile","inputDataFieldName":"data"}]},"options":{}}}},
+  {id:"localai",name:"LocalAI",cat:"ia",color:"#7c3aed",url:"https://localai.io",
+   desc:"Drop-in replacement de OpenAI API. LLMs, embeddings, imágenes, audio.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 L20 7 V17 L12 22 L4 17 V7 Z"/><path d="M12 22 V12 M12 12 L20 7 M12 12 L4 7"/></svg>`,
+   node:{"name":"LocalAI Chat","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8080/v1/chat/completions","sendBody":true,"specifyBody":"json","jsonBody":"{\"model\":\"ggml-model\",\"messages\":[{\"role\":\"user\",\"content\":\"Hola\"}]}","options":{}}}},
+  {id:"searxng",name:"SearXNG",cat:"ia",color:"#6366f1",url:"https://docs.searxng.org",
+   desc:"Meta-buscador privado. Auto-hospedado, sin tracking, API JSON.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/><path d="M8 11 H14 M11 8 V14"/></svg>`,
+   node:{"name":"SearXNG Search","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"http://localhost:8888/search","sendQuery":true,"queryParameters":{"parameters":[{"name":"q","value":"={{ $json.query }}"},{"name":"format","value":"json"}]},"options":{}}}},
+
+  // --- Bases de Datos ---
+  {id:"postgres",name:"PostgreSQL",cat:"db",color:"#60a5fa",url:"https://www.postgresql.org",
+   desc:"BD relacional avanzada. Soporte JSON, full-text, pgvector para IA.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6 V18 C4 19.66 7.58 21 12 21 C16.42 21 20 19.66 20 18 V6"/><path d="M4 12 C4 13.66 7.58 15 12 15 C16.42 15 20 13.66 20 12"/></svg>`,
+   node:{"name":"Postgres Query","type":"n8n-nodes-base.postgres","typeVersion":2.5,"parameters":{"operation":"executeQuery","query":"SELECT * FROM tabla LIMIT 10"}}},
+  {id:"mysql",name:"MySQL / MariaDB",cat:"db",color:"#3b82f6",url:"https://www.mysql.com",
+   desc:"BD relacional más usada del mundo. MariaDB es su fork open-source.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6 V18 C4 19.66 7.58 21 12 21 C16.42 21 20 19.66 20 18 V6"/><path d="M4 12 C4 13.66 7.58 15 12 15 C16.42 15 20 13.66 20 12"/></svg>`,
+   node:{"name":"MySQL Query","type":"n8n-nodes-base.mySql","typeVersion":2.4,"parameters":{"operation":"executeQuery","query":"SELECT * FROM tabla LIMIT 10"}}},
+  {id:"redis",name:"Redis",cat:"db",color:"#ef4444",url:"https://redis.io",
+   desc:"Cache/cola en memoria ultra-rápido. Pub/sub, streams, rate-limiting.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10 H20 M10 4 V20"/></svg>`,
+   node:{"name":"Redis Get","type":"n8n-nodes-base.redis","typeVersion":1,"parameters":{"operation":"get","key":"mi_clave"}}},
+  {id:"influxdb",name:"InfluxDB",cat:"db",color:"#22d3ee",url:"https://www.influxdata.com",
+   desc:"BD time-series para métricas, sensores IoT y monitoreo industrial.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round"><path d="M3 17 L7 11 L11 14 L15 7 L21 12"/><path d="M3 20 H21"/></svg>`,
+   node:{"name":"InfluxDB Write","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8086/api/v2/write?org=myorg&bucket=mybucket","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","sendBody":true,"body":"cpu,host=server01 value=0.64","options":{}}}},
+  {id:"mongodb",name:"MongoDB",cat:"db",color:"#4ade80",url:"https://www.mongodb.com",
+   desc:"BD NoSQL documental. Flexible para JSON, logs, catálogos.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 C12 2 6 8 6 14 C6 17.3 8.7 20 12 20 C15.3 20 18 17.3 18 14 C18 8 12 2 12 2Z"/><path d="M12 20 V22"/></svg>`,
+   node:{"name":"MongoDB Find","type":"n8n-nodes-base.mongoDb","typeVersion":1,"parameters":{"operation":"find","collection":"mi_coleccion","options":{}}}},
+
+  // --- Monitoreo ---
+  {id:"grafana",name:"Grafana",cat:"mon",color:"#f59e0b",url:"https://grafana.com",
+   desc:"Dashboards y visualización de métricas. Alertas por webhook a n8n.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7 V12 L15 15"/></svg>`,
+   node:{"name":"Grafana Webhook","type":"n8n-nodes-base.webhook","typeVersion":2,"parameters":{"httpMethod":"POST","path":"grafana-alert","options":{}}}},
+  {id:"prometheus",name:"Prometheus",cat:"mon",color:"#ef4444",url:"https://prometheus.io",
+   desc:"Monitoreo y alertas de infraestructura. Alertmanager → n8n webhook.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 C6.5 2 2 6.5 2 12 L6 12 C6 8.7 8.7 6 12 6 C15.3 6 18 8.7 18 12 L22 12 C22 6.5 17.5 2 12 2Z"/><path d="M12 10 V16 M9 13 H15"/></svg>`,
+   node:{"name":"Prometheus Alert","type":"n8n-nodes-base.webhook","typeVersion":2,"parameters":{"httpMethod":"POST","path":"prometheus-alert","options":{}}}},
+  {id:"uptime-kuma",name:"Uptime Kuma",cat:"mon",color:"#22c55e",url:"https://github.com/louislam/uptime-kuma",
+   desc:"Monitor de uptime auto-hospedado. Webhooks de estado a n8n.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M3 12 L7 12 L9 6 L12 18 L15 10 L17 14 L21 12"/></svg>`,
+   node:{"name":"Uptime Kuma Webhook","type":"n8n-nodes-base.webhook","typeVersion":2,"parameters":{"httpMethod":"POST","path":"uptime-kuma","options":{}}}},
+  {id:"portainer",name:"Portainer",cat:"mon",color:"#3b82f6",url:"https://www.portainer.io",
+   desc:"Gestión visual de Docker/K8s. API REST para orquestar contenedores.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+   node:{"name":"Portainer API","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"http://localhost:9000/api/endpoints","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","options":{}}}},
+
+  // --- Comunicación ---
+  {id:"mattermost",name:"Mattermost",cat:"comm",color:"#60a5fa",url:"https://mattermost.com",
+   desc:"Slack open-source. Webhooks entrantes y API de bots.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"><path d="M4 5 H20 V16 H11 L7 20 V16 H4 Z"/></svg>`,
+   node:{"name":"Mattermost Webhook","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8065/hooks/TU_HOOK_ID","sendBody":true,"specifyBody":"json","jsonBody":"{\"text\":\"Mensaje desde n8n\"}","options":{}}}},
+  {id:"rocketchat",name:"Rocket.Chat",cat:"comm",color:"#f472b6",url:"https://rocket.chat",
+   desc:"Plataforma de comunicación open-source. Webhooks y bot API.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 10 H16 M8 14 H13"/></svg>`,
+   node:{"name":"Rocket.Chat Webhook","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:3000/hooks/TU_HOOK_ID","sendBody":true,"specifyBody":"json","jsonBody":"{\"text\":\"Alerta desde n8n\"}","options":{}}}},
+  {id:"ntfy",name:"ntfy.sh",cat:"comm",color:"#4ade80",url:"https://ntfy.sh",
+   desc:"Notificaciones push por HTTP. Sin registro, sin API key. Ultra simple.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+   node:{"name":"ntfy Push","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"https://ntfy.sh/tu-topico","sendBody":true,"body":"={{ $json.mensaje }}","options":{}}}},
+
+  // --- Almacenamiento ---
+  {id:"minio",name:"MinIO",cat:"store",color:"#34d399",url:"https://min.io",
+   desc:"Object storage compatible S3. Para backups, archivos, media.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="1.8" stroke-linecap="round"><path d="M4 7 L12 3 L20 7 L12 11 Z"/><path d="M4 7 V17 L12 21 L20 17 V7"/><path d="M12 11 V21"/></svg>`,
+   node:{"name":"MinIO / S3 Upload","type":"n8n-nodes-base.awsS3","typeVersion":1,"parameters":{"operation":"upload","bucketName":"mi-bucket","fileName":"archivo.csv","binaryData":true}}},
+  {id:"nextcloud",name:"Nextcloud",cat:"store",color:"#60a5fa",url:"https://nextcloud.com",
+   desc:"Cloud privado: archivos, calendario, contactos. API WebDAV/REST.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="14" r="4"/><circle cx="16" cy="12" r="5"/><circle cx="12" cy="8" r="3"/></svg>`,
+   node:{"name":"Nextcloud WebDAV","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"PUT","url":"http://localhost/remote.php/dav/files/user/ruta/archivo.txt","authentication":"predefinedCredentialType","nodeCredentialType":"httpBasicAuth","sendBody":true,"body":"contenido","options":{}}}},
+
+  // --- No-Code / CMS ---
+  {id:"nocodb",name:"NocoDB",cat:"nocode",color:"#22d3ee",url:"https://nocodb.com",
+   desc:"Airtable open-source. BD con UI de hoja de cálculo. API REST.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9 H21 M3 15 H21 M9 3 V21 M15 3 V21"/></svg>`,
+   node:{"name":"NocoDB API","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"http://localhost:8080/api/v1/db/data/noco/TU_PROYECTO/TU_TABLA","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","options":{}}}},
+  {id:"baserow",name:"Baserow",cat:"nocode",color:"#4ade80",url:"https://baserow.io",
+   desc:"Alternativa open-source a Airtable. API REST completa.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9 H21 M9 3 V21"/></svg>`,
+   node:{"name":"Baserow API","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"http://localhost:8000/api/database/rows/table/TU_TABLA/","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","options":{}}}},
+  {id:"directus",name:"Directus",cat:"nocode",color:"#6366f1",url:"https://directus.io",
+   desc:"Headless CMS + backend instantáneo sobre tu BD. API REST/GraphQL.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 L22 8 V16 L12 22 L2 16 V8 Z"/><path d="M12 22 V12 M2 8 L12 12 L22 8"/></svg>`,
+   node:{"name":"Directus API","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"http://localhost:8055/items/tu_coleccion","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","options":{}}}},
+  {id:"supabase",name:"Supabase",cat:"nocode",color:"#22c55e",url:"https://supabase.com",
+   desc:"Backend open-source: BD Postgres + Auth + Storage + Realtime.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 L2 7 L12 12 L22 7 Z"/><path d="M2 17 L12 22 L22 17"/><path d="M2 12 L12 17 L22 12"/></svg>`,
+   node:{"name":"Supabase REST","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"https://TU_PROYECTO.supabase.co/rest/v1/tu_tabla","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","options":{}}}},
+  {id:"appwrite",name:"Appwrite",cat:"nocode",color:"#f472b6",url:"https://appwrite.io",
+   desc:"Backend open-source: BD, Auth, Storage, Functions. Self-hosted.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="1.8" stroke-linecap="round"><path d="M12 2 L4 7 V17 L12 22 L20 17 V7 Z"/><circle cx="12" cy="12" r="3"/></svg>`,
+   node:{"name":"Appwrite API","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"url":"http://localhost/v1/databases/TU_DB/collections/TU_COL/documents","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","options":{}}}},
+
+  // --- IoT / Industrial ---
+  {id:"mqtt",name:"MQTT (Mosquitto)",cat:"iot",color:"#fb923c",url:"https://mosquitto.org",
+   desc:"Protocolo de mensajería IoT. Pub/Sub ligero para sensores y SCADA.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2 V6 M12 18 V22 M2 12 H6 M18 12 H22"/><path d="M5 5 L8 8 M16 16 L19 19 M19 5 L16 8 M8 16 L5 19"/></svg>`,
+   node:{"name":"MQTT Publish","type":"n8n-nodes-base.mqtt","typeVersion":1,"parameters":{"topic":"planta/sensor/temp","message":"={{ $json.valor }}"}}},
+  {id:"nodered",name:"Node-RED",cat:"iot",color:"#ef4444",url:"https://nodered.org",
+   desc:"Programación visual para IoT/flows. Complementa n8n en el edge.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8 8 L11 16 M16 8 L13 16"/></svg>`,
+   node:{"name":"Node-RED Webhook","type":"n8n-nodes-base.webhook","typeVersion":2,"parameters":{"httpMethod":"POST","path":"nodered-bridge","options":{}}}},
+  {id:"homeassistant",name:"Home Assistant",cat:"iot",color:"#4ade80",url:"https://www.home-assistant.io",
+   desc:"Automatización del hogar open-source. API REST + webhooks.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round"><path d="M3 12 L12 3 L21 12"/><path d="M5 10 V20 H19 V10"/><rect x="9" y="14" width="6" height="6"/></svg>`,
+   node:{"name":"Home Assistant API","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8123/api/services/light/turn_on","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","sendBody":true,"specifyBody":"json","jsonBody":"{\"entity_id\":\"light.sala\"}","options":{}}}},
+
+  // --- Documentos ---
+  {id:"gotenberg",name:"Gotenberg",cat:"doc",color:"#94a3b8",url:"https://gotenberg.dev",
+   desc:"API para generar PDF desde HTML, Markdown, Office, URLs.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"><path d="M14 2 H6 C4.9 2 4 2.9 4 4 V20 C4 21.1 4.9 22 6 22 H18 C19.1 22 20 21.1 20 20 V8 Z"/><path d="M14 2 V8 H20"/></svg>`,
+   node:{"name":"Gotenberg HTML→PDF","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:3000/forms/chromium/convert/html","contentType":"multipart-form-data","sendBody":true,"bodyParameters":{"parameters":[{"name":"files","parameterType":"n8nBinaryFile","inputDataFieldName":"data"}]},"options":{}}}},
+  {id:"stirling-pdf",name:"Stirling-PDF",cat:"doc",color:"#60a5fa",url:"https://github.com/Stirling-Tools/Stirling-PDF",
+   desc:"Suite PDF local: merge, split, OCR, firmar, comprimir. API REST.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"><path d="M14 2 H6 C4.9 2 4 2.9 4 4 V20 C4 21.1 4.9 22 6 22 H18 C19.1 22 20 21.1 20 20 V8 Z"/><path d="M14 2 V8 H20"/><path d="M9 15 H15 M9 18 H13"/></svg>`,
+   node:{"name":"Stirling-PDF Merge","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8080/api/v1/general/merge-pdfs","contentType":"multipart-form-data","sendBody":true,"bodyParameters":{"parameters":[{"name":"fileInputs","parameterType":"n8nBinaryFile","inputDataFieldName":"data"}]},"options":{}}}},
+  {id:"paperless",name:"Paperless-ngx",cat:"doc",color:"#f59e0b",url:"https://docs.paperless-ngx.com",
+   desc:"Gestión documental con OCR, tags y búsqueda full-text. API REST.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6 H16 M8 10 H16 M8 14 H12"/></svg>`,
+   node:{"name":"Paperless-ngx Upload","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:8000/api/documents/post_document/","authentication":"predefinedCredentialType","nodeCredentialType":"httpHeaderAuth","contentType":"multipart-form-data","sendBody":true,"bodyParameters":{"parameters":[{"name":"document","parameterType":"n8nBinaryFile","inputDataFieldName":"data"}]},"options":{}}}},
+
+  // --- Web / Scraping ---
+  {id:"changedetection",name:"ChangeDetection.io",cat:"web",color:"#4ade80",url:"https://changedetection.io",
+   desc:"Monitor de cambios en webs. Notifica por webhook cuando hay diffs.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 10 L10 13 L17 7"/></svg>`,
+   node:{"name":"ChangeDetection Webhook","type":"n8n-nodes-base.webhook","typeVersion":2,"parameters":{"httpMethod":"POST","path":"change-detection","options":{}}}},
+  {id:"playwright",name:"Playwright (Docker)",cat:"web",color:"#22d3ee",url:"https://playwright.dev",
+   desc:"Automatización de navegador headless. Scraping de SPAs y JS-heavy.",
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8 H21"/><circle cx="6" cy="6" r=".8" fill="#22d3ee"/><circle cx="8.5" cy="6" r=".8" fill="#22d3ee"/></svg>`,
+   node:{"name":"Playwright Scraping","type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"parameters":{"method":"POST","url":"http://localhost:3000/scrape","sendBody":true,"specifyBody":"json","jsonBody":"{\"url\":\"https://example.com\",\"selector\":\".product-title\"}","options":{}}}},
+];
+
+let tbOpen=false, tbActiveCat="all";
+const tbStatus={}; // id → 'checking'|'online'|'offline'
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// Metadata: puerto local + instrucciones de instalación por herramienta
+const TB_META = {
+  ollama:        {port:11434, path:"/api/tags", install:{winget:"winget install Ollama.Ollama", docker:"docker run -d --name ollama -p 11434:11434 ollama/ollama", note:"Tras instalar, ejecuta: ollama pull llama3"}},
+  lmstudio:      {port:1234,  path:"/v1/models", install:{winget:"winget install LMStudio.LMStudio", note:"Abre LM Studio → carga un modelo → activa 'Start Server' en :1234"}},
+  "whisper-cpp": {port:8080,  path:"/", install:{docker:"docker run -d --name whisper-cpp -p 8080:8080 ghcr.io/ggerganov/whisper.cpp:server", note:"Descarga un modelo .bin y pásalo con -m flag"}},
+  localai:       {port:8080,  path:"/v1/models", install:{docker:"docker run -d --name localai -p 8080:8080 localai/localai:latest", note:"Compatible API OpenAI. Descarga modelos desde la UI en :8080"}},
+  searxng:       {port:8888,  path:"/search?q=test&format=json", install:{docker:"docker run -d --name searxng -p 8888:8080 searxng/searxng", note:"Edita settings.yml para activar format: json en [search]"}},
+  postgres:      {port:5432,  path:null, install:{winget:"winget install PostgreSQL.PostgreSQL", docker:"docker run -d --name postgres -e POSTGRES_PASSWORD=secret -p 5432:5432 postgres:16", note:"Crea una BD y usuario tras instalar"}},
+  mysql:         {port:3306,  path:null, install:{winget:"winget install Oracle.MySQL", docker:"docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=secret -p 3306:3306 mysql:8", note:""}},
+  redis:         {port:6379,  path:null, install:{winget:"winget install Redis.Redis", docker:"docker run -d --name redis -p 6379:6379 redis:7", note:""}},
+  influxdb:      {port:8086,  path:"/health", install:{winget:"winget install InfluxData.InfluxDB", docker:"docker run -d --name influxdb -p 8086:8086 influxdb:2", note:"Crea org y bucket desde la UI en :8086"}},
+  mongodb:       {port:27017, path:null, install:{winget:"winget install MongoDB.Server", docker:"docker run -d --name mongo -p 27017:27017 mongo:7", note:""}},
+  grafana:       {port:3000,  path:"/api/health", install:{winget:"winget install Grafana.Grafana", docker:"docker run -d --name grafana -p 3000:3000 grafana/grafana", note:"Login por defecto: admin / admin"}},
+  prometheus:    {port:9090,  path:"/-/healthy", install:{winget:"winget install Prometheus.Prometheus", docker:"docker run -d --name prometheus -p 9090:9090 prom/prometheus", note:"Crea prometheus.yml con tus targets"}},
+  "uptime-kuma": {port:3001,  path:"/", install:{docker:"docker run -d --name uptime-kuma -p 3001:3001 -v uptime-data:/app/data louislam/uptime-kuma:1", note:"Configura webhooks de notificación apuntando a n8n"}},
+  portainer:     {port:9000,  path:"/api/status", install:{docker:"docker run -d --name portainer -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce", note:"Crea usuario admin en primer acceso"}},
+  mattermost:    {port:8065,  path:"/api/v4/system/ping", install:{docker:"docker run -d --name mattermost -p 8065:8065 mattermost/mattermost-team-edition", note:"Crea un webhook entrante en Integrations"}},
+  rocketchat:    {port:3000,  path:"/api/info", install:{docker:"docker run -d --name rocketchat -p 3000:3000 rocket.chat", note:"Requiere MongoDB. Usa docker-compose oficial"}},
+  ntfy:          {port:0,     path:null, install:{docker:"docker run -d --name ntfy -p 8090:80 binwiederhier/ntfy serve", note:"O usa el servidor público ntfy.sh sin instalar nada"}},
+  minio:         {port:9000,  path:"/minio/health/live", install:{docker:"docker run -d --name minio -p 9000:9000 -p 9001:9001 minio/minio server /data --console-address :9001", note:"Console en :9001. Crea bucket y access key"}},
+  nextcloud:     {port:8081,  path:"/status.php", install:{docker:"docker run -d --name nextcloud -p 8081:80 nextcloud", note:"Requiere BD (MariaDB/Postgres). Usa docker-compose oficial"}},
+  nocodb:        {port:8080,  path:"/api/v1/health", install:{docker:"docker run -d --name nocodb -p 8080:8080 nocodb/nocodb:latest", note:"Crea proyecto y genera API token en Settings"}},
+  baserow:       {port:8000,  path:"/api/user/me/", install:{docker:"docker run -d --name baserow -p 8000:80 baserow/baserow", note:"Crea usuario y genera token en Settings"}},
+  directus:      {port:8055,  path:"/server/health", install:{docker:"docker run -d --name directus -p 8055:8055 directus/directus", note:"Requiere BD. Primer acceso crea admin"}},
+  supabase:      {port:0,     path:null, install:{docker:"npx supabase init && npx supabase start", note:"O usa supabase.com cloud gratis. Copia URL + anon key"}},
+  appwrite:      {port:80,    path:"/v1/health", install:{docker:"docker run -it --rm --volume /var/run/docker.sock:/var/run/docker.sock --volume \"$(pwd)/appwrite\":/usr/src/code/appwrite:env --entrypoint=\"install\" appwrite/appwrite", note:"Sigue el wizard interactivo de instalación"}},
+  mqtt:          {port:1883,  path:null, install:{winget:"winget install EclipseFoundation.Mosquitto", docker:"docker run -d --name mosquitto -p 1883:1883 -p 9001:9001 eclipse-mosquitto", note:"Crea mosquitto.conf con listener y allow_anonymous"}},
+  nodered:       {port:1880,  path:"/", install:{npm:"npm install -g node-red && node-red", docker:"docker run -d --name nodered -p 1880:1880 nodered/node-red", note:"Edita flows en el navegador :1880"}},
+  homeassistant: {port:8123,  path:"/api/", install:{docker:"docker run -d --name homeassistant --privileged -p 8123:8123 -v /PATH:/config homeassistant/home-assistant", note:"Genera Long-Lived Access Token en Profile"}},
+  gotenberg:     {port:3000,  path:"/health", install:{docker:"docker run -d --name gotenberg -p 3000:3000 gotenberg/gotenberg:8", note:""}},
+  "stirling-pdf":{port:8080,  path:"/api/v1/info/status", install:{docker:"docker run -d --name stirling-pdf -p 8080:8080 frooodle/s-pdf:latest", note:""}},
+  paperless:     {port:8000,  path:"/api/", install:{docker:"docker run -d --name paperless -p 8000:8000 ghcr.io/paperless-ngx/paperless-ngx:latest", note:"Requiere Redis + BD. Usa docker-compose oficial"}},
+  changedetection:{port:5000, path:"/", install:{docker:"docker run -d --name changedetection -p 5000:5000 -v data:/datastore dgtlmoon/changedetection.io", note:"Configura webhook de notificación apuntando a n8n"}},
+  playwright:    {port:3000,  path:null, install:{docker:"docker run -d --name playwright -p 3000:3000 mcr.microsoft.com/playwright:v1.40.0-jammy", note:"O usa npx playwright como librería en nodo Code de n8n"}},
+};
+
+// Detección de puertos vía fetch con timeout
+async function tbCheckPort(id){
+  const meta=TB_META[id]; if(!meta||!meta.port){tbStatus[id]='offline'; return;}
+  tbStatus[id]='checking';
+  try{
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),2500);
+    const url=`http://localhost:${meta.port}${meta.path||'/'}`;
+    await fetch(url,{mode:'no-cors',signal:ctrl.signal});
+    clearTimeout(timer);
+    tbStatus[id]='online';
+  }catch(e){
+    // no-cors returns opaque response = success for TCP check
+    if(e.name==='AbortError') tbStatus[id]='offline';
+    else tbStatus[id]='online'; // opaque = port is open
+  }
+}
+
+async function tbScanAll(){
+  const ids=TOOLS.map(t=>t.id);
+  await Promise.allSettled(ids.map(id=>tbCheckPort(id)));
+  renderTb();
+}
+
+function toggleTb(){
+  tbOpen=!tbOpen;
+  document.body.classList.toggle("tb-open",tbOpen);
+  if(tbOpen){ renderTb(); tbScanAll(); }
+}
+
+function buildTbCats(){
+  const used=[...new Set(TOOLS.map(t=>t.cat))];
+  let h=`<div class="tb-cat active" onclick="setTbCat('all',this)">Todas</div>`;
+  used.forEach(c=>{
+    const cat=TB_CATS[c]; if(!cat)return;
+    h+=`<div class="tb-cat" onclick="setTbCat('${c}',this)" style="--tc:${cat.color}">${cat.name}</div>`;
+  });
+  document.getElementById("tbCats").innerHTML=h;
+  document.getElementById("tbCount").textContent=TOOLS.length;
+}
+function setTbCat(c,el){
+  tbActiveCat=c;
+  document.querySelectorAll(".tb-cat").forEach(e=>e.classList.remove("active"));
+  el.classList.add("active");
+  renderTb();
+}
+
+function renderTb(){
+  const q=(document.getElementById("tbSearch").value||"").toLowerCase().trim();
+  const list=TOOLS.filter(t=>{
+    if(tbActiveCat!=="all"&&t.cat!==tbActiveCat)return false;
+    if(!q)return true;
+    return (t.name+" "+t.desc+" "+(TB_CATS[t.cat]?.name||"")).toLowerCase().includes(q);
+  });
+  const onlineN=TOOLS.filter(t=>tbStatus[t.id]==='online').length;
+  const grid=document.getElementById("tbGrid");
+  if(!list.length){grid.innerHTML=`<div class="tb-empty">Sin resultados</div>`;return;}
+
+  const scanDone=TOOLS.every(t=>tbStatus[t.id]&&tbStatus[t.id]!=='checking');
+  let scanBar=`<div class="tb-scan ${scanDone?'done':''}"><span class="tb-scan-dot"></span>${scanDone?'Escaneo completo':'Detectando servicios locales...'}<span class="tb-scan-count">${onlineN} conectados</span></div>`;
+
+  grid.innerHTML=scanBar+list.map(t=>{
+    const cat=TB_CATS[t.cat]||{name:t.cat,color:"#888"};
+    const st=tbStatus[t.id]||'checking';
+    const meta=TB_META[t.id];
+    const hasPort=meta&&meta.port>0;
+    return `<div class="tb-card" style="--tc:${t.color};--tc-bg:${t.color}18;--tc-bd:${t.color}40"
+      draggable="true" ondragstart="tbDragStart(event,'${t.id}')" title="Arrastra a n8n o usa los botones">
+      <div class="tb-copy" onclick="event.stopPropagation();tbCopy('${t.id}',this)" title="Copiar nodo n8n">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15 H4 C2.9 15 2 14.1 2 13 V4 C2 2.9 2.9 2 4 2 H13 C14.1 2 15 2.9 15 4 V5"/></svg>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="tb-icon">${t.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="tb-name">${t.name}</div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
+            <span class="tb-status ${st}" title="${st==='online'?'Conectado :'+meta.port:st==='offline'?'No detectado':'Verificando...'}"></span>
+            <span style="font-size:10px;color:var(--txt-faint)">${st==='online'?'localhost:'+meta.port:st==='checking'?'...':'no detectado'}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tb-desc">${t.desc}</div>
+      <div class="tb-foot">
+        <span class="tb-badge" style="--tc:${cat.color};--tc-bg:${cat.color}18;--tc-bd:${cat.color}40">${cat.name}</span>
+        <a class="tb-link" href="${t.url}" target="_blank" onclick="event.stopPropagation()">Docs ↗</a>
+      </div>
+      <div class="tb-actions">
+        ${st==='online'?`<div class="tb-btn connect" onclick="event.stopPropagation();tbConnect('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><path d="M5 13 L10 18 L20 6"/></svg>Conectar</div>`
+          :hasPort?`<div class="tb-btn install" onclick="event.stopPropagation();tbShowInstall('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><path d="M12 3 V15 M7 10 L12 15 L17 10"/><path d="M4 19 H20"/></svg>Instalar</div>`
+          :`<div class="tb-btn" onclick="event.stopPropagation();tbShowInstall('${t.id}')"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8 V12 M12 16 V16.01"/></svg>Info</div>`}
+        <div class="tb-btn" onclick="event.stopPropagation();tbCopy('${t.id}',null)"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15 H4 C2.9 15 2 14.1 2 13 V4 C2 2.9 2.9 2 4 2 H13 C14.1 2 15 2.9 15 4 V5"/></svg>Nodo</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function tbShowInstall(id){
+  const t=TOOLS.find(x=>x.id===id); if(!t)return;
+  const meta=TB_META[id]; if(!meta)return;
+  const inst=meta.install||{};
+  let cmds='';
+  if(inst.winget) cmds+=`<div class="tb-m-section"><h4>Windows (winget)</h4><div class="tb-m-cmd" onclick="tbCopyCmd(this)">${esc(inst.winget)}<span class="tb-m-copy-hint">clic para copiar</span></div></div>`;
+  if(inst.docker) cmds+=`<div class="tb-m-section"><h4>Docker</h4><div class="tb-m-cmd" onclick="tbCopyCmd(this)">${esc(inst.docker)}<span class="tb-m-copy-hint">clic para copiar</span></div></div>`;
+  if(inst.npm) cmds+=`<div class="tb-m-section"><h4>npm</h4><div class="tb-m-cmd" onclick="tbCopyCmd(this)">${esc(inst.npm)}<span class="tb-m-copy-hint">clic para copiar</span></div></div>`;
+  if(inst.note) cmds+=`<div class="tb-m-section"><h4>Nota</h4><div class="tb-m-note">${inst.note}</div></div>`;
+  if(!cmds) cmds=`<div class="tb-m-note">Consulta la documentación oficial para instrucciones de instalación.</div>`;
+
+  document.getElementById("tbModalContent").innerHTML=`
+    <h3><span class="tb-m-icon" style="--tc-bg:${t.color}18;--tc-bd:${t.color}40">${t.icon}</span>${esc(t.name)}</h3>
+    <div class="tb-m-desc">${esc(t.desc)}${meta.port?'<br><span style="color:var(--txt-faint);font-size:11px">Puerto por defecto: <b style="color:var(--accent2)">'+meta.port+'</b></span>':''}</div>
+    ${cmds}
+    <div class="tb-m-actions">
+      <a class="tb-m-btn primary" href="${t.url}" target="_blank">Documentación oficial</a>
+      <button class="tb-m-btn secondary" onclick="closeTbModal();tbCopy('${t.id}',null)">Copiar nodo n8n</button>
+    </div>`;
+  document.getElementById("tbModal").style.setProperty("--tc-bg",t.color+"18");
+  document.getElementById("tbModal").style.setProperty("--tc-bd",t.color+"40");
+  document.getElementById("tbModalOverlay").classList.add("show");
+}
+function closeTbModal(){document.getElementById("tbModalOverlay").classList.remove("show")}
+function tbCopyCmd(el){
+  const txt=el.textContent.replace('clic para copiar','').trim();
+  navigator.clipboard.writeText(txt);
+  el.classList.add("copied");
+  el.querySelector('.tb-m-copy-hint').textContent='copiado!';
+  setTimeout(()=>{el.classList.remove("copied");el.querySelector('.tb-m-copy-hint').textContent='clic para copiar';},1500);
+}
+
+function tbConnect(id){
+  tbCopy(id,null);
+  const t=TOOLS.find(x=>x.id===id);
+  const meta=TB_META[id];
+  tbShowToast(`${t.name} detectado en :${meta.port} — nodo copiado, pégalo en n8n con Ctrl+V`);
+}
+
+function tbGetNodeJson(id){
+  const t=TOOLS.find(x=>x.id===id); if(!t)return null;
+  const node=JSON.parse(JSON.stringify(t.node));
+  node.id="tool-"+id+"-"+Date.now();
+  node.position=[0,0];
+  return JSON.stringify({nodes:[node],connections:{}},null,2);
+}
+
+function tbCopy(id,btn){
+  const json=tbGetNodeJson(id); if(!json)return;
+  navigator.clipboard.writeText(json).then(()=>{
+    if(btn){btn.classList.add("copied");setTimeout(()=>btn.classList.remove("copied"),1500);}
+    tbShowToast("Nodo copiado — pégalo en n8n con Ctrl+V");
+  });
+}
+
+function tbDragStart(e,id){
+  const json=tbGetNodeJson(id); if(!json)return;
+  e.dataTransfer.setData("text/plain",json);
+  e.dataTransfer.effectAllowed="copy";
+  tbCopy(id,null);
+}
+
+let tbToastTimer;
+function tbShowToast(msg){
+  const el=document.getElementById("tbToast");
+  document.getElementById("tbToastTxt").textContent=msg;
+  el.classList.add("show");
+  clearTimeout(tbToastTimer);
+  tbToastTimer=setTimeout(()=>el.classList.remove("show"),3200);
+}
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeTbModal();toggleTb();}});
+buildTbCats();
+renderTb();
+</script>
+
+<script>
+// Service Worker (PWA / offline)
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

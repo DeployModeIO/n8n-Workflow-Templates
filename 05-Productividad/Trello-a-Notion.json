@@ -1,0 +1,10 @@
+{
+  "name": "Productividad - Sync Trello a Notion",
+  "nodes": [
+    { "parameters": { "pollTimes": { "item": [{ "mode": "everyMinute" }] } }, "id": "tr-trg", "name": "Trello Trigger", "type": "n8n-nodes-base.trelloTrigger", "typeVersion": 1, "position": [-260, 0] },
+    { "parameters": { "conditions": { "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" }, "conditions": [ { "id": "t1", "leftValue": "={{ $json.action.type }}", "rightValue": "createCard", "operator": { "type": "string", "operation": "equals" } } ], "combinator": "and" }, "options": {} }, "id": "tr-if", "name": "Nueva Tarjeta?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [-20, 0] },
+    { "parameters": { "operation": "create", "databaseId": { "__rl": true, "mode": "id", "value": "TU_DATABASE_ID" }, "title": "={{ $json.action.data.card.name }}", "options": {} }, "id": "tr-notion", "name": "Crear en Notion", "type": "n8n-nodes-base.notion", "typeVersion": 2.2, "position": [240, 0] }
+  ],
+  "connections": { "Trello Trigger": { "main": [[{ "node": "Nueva Tarjeta?", "type": "main", "index": 0 }]] }, "Nueva Tarjeta?": { "main": [[{ "node": "Crear en Notion", "type": "main", "index": 0 }], []] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}

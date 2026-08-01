@@ -1,0 +1,12 @@
+{
+  "name": "DevOps - Monitor de Uptime de Servidores",
+  "nodes": [
+    { "parameters": { "rule": { "interval": [{ "field": "minutes", "minutesInterval": 5 }] }, "options": {} }, "id": "up-sched", "name": "Cada 5min", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [-280, 0] },
+    { "parameters": { "assignments": { "assignments": [ { "id": "u0", "name": "urls", "value": "https://servidor1.com,https://servidor2.com", "type": "string" } ] }, "options": {} }, "id": "up-list", "name": "Lista Sitios", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [-40, 0] },
+    { "parameters": { "jsCode": "const urls = $input.first().json.urls.split(',');\nreturn urls.map(u => ({ json: { url: u.trim() } }));" }, "id": "up-split", "name": "Dividir URLs", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [200, 0] },
+    { "parameters": { "url": "={{ $json.url }}", "options": { "timeout": 10000, "redirect": { "redirect": { "followRedirects": true } } } }, "id": "up-http", "name": "Ping HTTP", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [440, 0], "onError": "continueErrorOutput" },
+    { "parameters": { "chatId": "TU_CHAT_ID", "text": "=🔴 CAÍDO: {{ $json.url }} no responde", "additionalFields": {} }, "id": "up-alert", "name": "Alertar Caída", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [700, 120] }
+  ],
+  "connections": { "Cada 5min": { "main": [[{ "node": "Lista Sitios", "type": "main", "index": 0 }]] }, "Lista Sitios": { "main": [[{ "node": "Dividir URLs", "type": "main", "index": 0 }]] }, "Dividir URLs": { "main": [[{ "node": "Ping HTTP", "type": "main", "index": 0 }]] }, "Ping HTTP": { "main": [[]], "error": [[{ "node": "Alertar Caída", "type": "main", "index": 0 }]] } },
+  "pinData": {}, "settings": { "executionOrder": "v1" }, "active": false, "tags": []
+}
